@@ -1,47 +1,16 @@
-#profile-title:АНТИЗАГЛУШКА 
-
-#profile-update-interval: 1
+#profile-title: ADAM_VPN | АНТИЗАГЛУШКА
+happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN
 
 #profile-subscription-url: https://raw.githubusercontent.com/antivpn-7/and_the7/main/README.md
-
 #support-url:https://wa.me/79659571323
-
 #profile-web-page-url:https://wa.me/79659571323
-
-#subscription-userinfo: upload=1; download=1; total=1; expire=999999999999999
-
-#profile-notice: ━━━━━━━━━━━━━━━\n  \n━━━━━━━━━━━━━━━\n🛡 Статус: Активен\n🚀 Трафик: Безлимитный\n⚡ Скорость: Максимальная\n━━━━━━━━━━━━━━━
-
 #profile-icon: https://share.google/Kl64QMcBQApgnH6aJ
-
 #profile-test-url: http://cp.cloudflare.com/generate_204
-
-#profile-test-interval: 300
-
-#profile-auto-switch: true
-
-#profile-allow-copy: false
-
-#profile-locked: true
-
-#profile-read-only: true
-
-#profile-prefer-ipv4: true
-
-#auto-continue: true
-
-#announce:Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!
-
 vless://aed996ff-eca0-4d4a-b2f3-01362ec4d48d@193.188.23.65:443?type=tcp&headerType=none&security=reality&fp=chrome&sni=yandex.ru&pbk=KIRFKsdto8opnbRdEcTtsc3m-mTwW9L_Gnk5DSwrWx0&sid=b8960f8a008648c1#🇩🇪 ⚡ Основной 
-
 vless://aed996ff-eca0-4d4a-b2f3-01362ec4d48d@72.56.240.250:2443?type=tcp&headerType=none&security=reality&fp=chrome&sni=yandex.ru&pbk=NGXEKZXsnI0yWLAG4Qj6XKSVkDpqN_UaKsW5yJPMBUc#🇷🇺 ⚔️ Запасной #1
-
 vless://aed996ff-eca0-4d4a-b2f3-01362ec4d48d@72.56.245.52:2443?type=tcp&headerType=none&security=reality&fp=chrome&sni=yandex.ru&pbk=NGXEKZXsnI0yWLAG4Qj6XKSVkDpqN_UaKsW5yJPMBUc#🇫🇮 ⚔️ Запасной #2
-
 vless://aed996ff-eca0-4d4a-b2f3-01362ec4d48d@193.188.23.65:2443?type=tcp&headerType=none&security=reality&fp=chrome&sni=yandex.ru&pbk=NGXEKZXsnI0yWLAG4Qj6XKSVkDpqN_UaKsW5yJPMBUc#🇬🇧 ⚔️ Запасной #3
-
 vless://aed996ff-eca0-4d4a-b2f3-01362ec4d48d@72.56.245.52:443?type=tcp&headerType=none&security=reality&fp=chrome&sni=yandex.ru&pbk=d3ir4w1ShM7w1zxcBAnFp9Kiy1tKJvtrlRXffsWZq0k#🇦🇷 ⚔️ Запасной #4
-
 vless://ae9d4558-d700-41e8-a1fb-415580507b5e@clo.lavivas.org:8080?security=reality&encryption=none&pbk=K77asb8hInjx4LNYkx9t-kR1_4w7zCEypRI5tqQvB2M&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=m.vk.com#%F0%9F%87%B7%F0%9F%87%BA%20%D0%90%D0%BD%D1%82%D0%B8%D0%B7%D0%B0%D0%B3%D0%BB%D1%83%D1%88%D0%BA%D0%B0%20%E2%84%961
 vless://ae9d4558-d700-41e8-a1fb-415580507b5e@cloud.lavivas.org:8080?security=reality&encryption=none&pbk=i3Gso3TALndleIicnEuma7_ix-hlGzk_BelrHPysZh8&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=m.vk.com#%F0%9F%87%B7%F0%9F%87%BA%20%D0%90%D0%BD%D1%82%D0%B8%D0%B7%D0%B0%D0%B3%D0%BB%D1%83%D1%88%D0%BA%D0%B0%20%E2%84%962
 vless://ae9d4558-d700-41e8-a1fb-415580507b5e@art.lavivas.org:8080?security=reality&encryption=none&pbk=mg0_vScapBay--mGHtgepcDY6pT8DbnZUXJr8ka8CXc&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=m.vk.com#%F0%9F%87%B7%F0%9F%87%BA%20%D0%90%D0%BD%D1%82%D0%B8%D0%B7%D0%B0%D0%B3%D0%BB%D1%83%D1%88%D0%BA%D0%B0%20%E2%84%963
@@ -62,3 +31,26 @@ vless://d8dc8088-8ada-40b6-b0d9-fcc99aed3ecf@51.250.3.32:4443?security=reality&e
 vless://d8dc8088-8ada-40b6-b0d9-fcc99aed3ecf@158.160.135.123:443?security=reality&encryption=none&pbk=EpaXq8cW5qX1z0ToZYNDGhhI8sq5Wy8pWvr9MM39gUk&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni=max.ru&sid=a1b2c3d4#%F0%9F%87%B3%F0%9F%87%B1%20%D0%90%D0%BD%D1%82%D0%B8%D0%B7%D0%B0%D0%B3%D0%BB%D1%83%D1%88%D0%BA%D0%B0%20%E2%84%9618
 vless://d8dc8088-8ada-40b6-b0d9-fcc99aed3ecf@51.250.13.158:8443?security=reality&encryption=none&pbk=EpaXq8cW5qX1z0ToZYNDGhhI8sq5Wy8pWvr9MM39gUk&headerType=none&fp=random&type=tcp&flow=xtls-rprx-vision&sni=kinopoisk.ru&sid=abcd1234#%F0%9F%87%B3%F0%9F%87%B1%20%D0%90%D0%BD%D1%82%D0%B8%D0%B7%D0%B0%D0%B3%D0%BB%D1%83%D1%88%D0%BA%D0%B0%20%E2%84%9619
 vless://f9348c30-8a34-40bc-ae15-e938235b9a6b@5.188.114.44:443?mode=multi&security=reality&encryption=none&pbk=h6gpE3mCwKFwTx7nn_hAtAIF1pHFIuXWdNVyYrokqkI&fp=firefox&spx=%2F1f630fecd5eceade&type=grpc&sni=max.ru&sid=dcbaae96dfd126d0#%F0%9F%87%A9%F0%9F%87%AA%20%D0%90%D0%BD%D1%82%D0%B8%D0%B7%D0%B0%D0%B3%D0%BB%D1%83%D1%88%D0%BA%D0%B0%20%E2%84%9620
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@ru.tgflovv.ru:443?hiddify=1&sni=max.ru&type=tcp&alpn=http%2F1.1&host=max.ru&encryption=none&fp=chrome&headerType=none&flow=xtls-rprx-vision&security=reality&pbk=dnLLXzjeK60Uc_3ERBlnWIKRGmbXn9b--vn5Yl-LfVI&sid=6fb05d1f3a#🇵🇰 Антизаглушка
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@ru.tgflovv.ru:443?hiddify=1&sni=yandex.ru&type=tcp&alpn=http%2F1.1&host=yandex.ru&encryption=none&fp=chrome&headerType=none&flow=xtls-rprx-vision&security=reality&pbk=dnLLXzjeK60Uc_3ERBlnWIKRGmbXn9b--vn5Yl-LfVI&sid=6fb05d1f3a#🇵🇰 Антизаглушка
+ss://MjAyMi1ibGFrZTMtYWVzLTI1Ni1nY206T1RoaFpEZ3hNMkZrTWpWbU5EYzFOamxrWldaaFlXRTRObUkyTTJVM05EST06WVRJek1XTXdPRGs1TURZMU5EVXlOV0V5TWpaaVlqUm1OR1prTkRnM1pEST0=@85.239.38.170:31675#🇵🇰 Антизаглушка
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@vpn.tgflovv.ru:443?hiddify=1&sni=vpn.tgflovv.ru&type=ws&alpn=http%2F1.1&path=%2FEXfE3H8UT1R6TWv9v&host=vpn.tgflovv.ru&encryption=none&fp=chrome&headerType=none&allowInsecure=true&insecure=true&security=tls#🇵🇰 Антизаглушка
+ss://MjAyMi1ibGFrZTMtYWVzLTI1Ni1nY206TXpRd05XTXhabVExWVRObE5EUXlPR0l3T1RGallUVXlPV016TjJZMU9UWT06WVRJek1XTXdPRGs1TURZMU5EVXlOV0V5TWpaaVlqUm1OR1prTkRnM1pEST0=@vpn.tgflovv.ru:30453#🇵🇰 Антизаглушка
+hysteria2://a231c089-9065-4525-a226-bb4f4fd487d2@vpn.tgflovv.ru:36873?hiddify=1&obfs=salamander&obfs-password=uUpjpRk6HbQ2M&sni=vpn.tgflovv.ru&insecure=1&allow_insecure=1#🇵🇰 Антизаглушка
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@rudostup.tgflovv.ru:443?hiddify=1&sni=rudostup.tgflovv.ru&type=tcp&alpn=http%2F1.1&path=%2FV9hPLVk6iDK9GhmiP0o4&host=rudostup.tgflovv.ru&encryption=none&fp=chrome&headerType=none&allowInsecure=true&insecure=true&security=tls#🇵🇰 Антизаглушка
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@rudostup.tgflovv.ru:443?hiddify=1&sni=rudostup.tgflovv.ru&type=grpc&alpn=h2&path=V9hPLVk6iDK9GRr8AkhbmW902qXY&host=rudostup.tgflovv.ru&serviceName=V9hPLVk6iDK9GRr8AkhbmW902qXY&mode=gun&encryption=none&fp=chrome&headerType=none&allowInsecure=true&insecure=true&security=tls#🇵🇰 Антизаглушка
+ss://MjAyMi1ibGFrZTMtYWVzLTI1Ni1nY206TnpjNE1tWmtZVGs0TnpNMU5ETTBaamxpT1RWaFpUTmtOVGRpTm1Gall6Yz06WVRJek1XTXdPRGs1TURZMU5EVXlOV0V5TWpaaVlqUm1OR1prTkRnM1pEST0=@rudostup.tgflovv.ru:17460#🇵🇰 Антизаглушка
+hysteria2://a231c089-9065-4525-a226-bb4f4fd487d2@rudostup.tgflovv.ru:43033?hiddify=1&obfs=salamander&obfs-password=q1MxbQuFBVqxmhqenKWqhDIYrPjLaz&sni=rudostup.tgflovv.ru&insecure=1&allow_insecure=1#🇵🇰 Антизаглушка
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@rudostup.tgflovv.ru:443?hiddify=1&sni=ads.x5.ru&type=tcp&alpn=http%2F1.1&host=ads.x5.ru&encryption=none&fp=chrome&headerType=none&flow=xtls-rprx-vision&security=reality&pbk=ufunjvjwHQ5AbHAF03i3RxjOof5P23ALLsbGlrU7Uik&sid=e90fc4a152dd45#🇵🇰 Антизаглушка
+ss://MjAyMi1ibGFrZTMtYWVzLTI1Ni1nY206TXpVNVlUUm1ZbVkzWW1Ga05EWTRNbUppWVRrNVpUSTVaRFkxTkRjM05tRT06WVRJek1XTXdPRGs1TURZMU5EVXlOV0V5TWpaaVlqUm1OR1prTkRnM1pEST0=@usa.tgflovv.ru:16649#🇵🇰 Антизаглушка
+hysteria2://a231c089-9065-4525-a226-bb4f4fd487d2@usa.tgflovv.ru:13089?hiddify=1&obfs=salamander&obfs-password=Vlb9X6uGxZ399VjJ&sni=usa.tgflovv.ru&insecure=1&allow_insecure=1#🇵🇰 Антизаглушка
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@usa.tgflovv.ru:443?hiddify=1&sni=ads.x5.ru&type=tcp&alpn=http%2F1.1&host=ads.x5.ru&encryption=none&fp=chrome&headerType=none&flow=xtls-rprx-vision&security=reality&pbk=kp75UxUgf3_WDz0Ex-SC-T65VhhYmHMggKS1zlXMlkA&sid=5cd7#🇵🇰 Антизаглушка
+ss://bm9uZTozZTk2ZWY3ZC04NjM3LTQyYzItYWM3My03NTE4MjE5NmU3NTU@212.192.215.229:8443?plugin=v2ray-plugin%3Bmode%3Dwebsocket%3Bhost%3Dmfvpn.fuchen.indevs.in%3Bpath%3D3e96ef7d-8637-42c2-ac73-75182196e755%2F%3Fed%5C%3D2560%3Btls%3Bmux%3D0#🇵🇰 Антизаглушка
+vless://b37556e3-38aa-4311-af42-88e550229a77@205.237.107.184:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=randomized&sni=to-do.digital&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU#🇵🇰 Антизаглушка
+vless://b3958b4a-305b-49f3-953e-b0fc3c21f738@205.237.107.185:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=randomized&sni=to-do.digital&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU#🇵🇰 Антизаглушка
+vless://d970a4cf-c2b0-4d1a-9f73-5ac2d70b930d@205.237.107.161:443?type=tcp&security=reality&encryption=none&flow=xtls-rprx-vision&fp=randomized&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU&sni=to-do.digital#🇵🇰 Антизаглушка
+vless://5b05f70d-c2db-4a0d-b48c-b5576663baf6@205.237.107.185:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=randomized&sni=to-do.digital&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU#🇵🇰 Антизаглушка
+vless://5b05f70d-c2db-4a0d-b48c-b5576663baf6@205.237.107.192:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=randomized&sni=to-do.digital&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU#🇵🇰 Антизаглушка
+vless://b37556e3-38aa-4311-af42-88e550229a77@205.237.107.160:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=randomized&sni=to-do.digital&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU#🇵🇰 Антизаглушка
+vless://711f1871-97d8-483c-a88f-4768d36f33bb@185.189.46.98:443?type=tcp&headerType=none&security=reality&encryption=none&sni=hvec.normbot.ru&fp=chrome&pbk=pgG2grngQEtOFJImLfz0AEm-O2IodM2jCY4aMCYQI1U&sid=0a8428f5ab26ef5a&flow=xtls-rprx-vision#🇵🇰 Антизаглушка
+vless://75807638-6f19-07d0-ae08-38492ee85c88@178.72.181.52:52006?allowInsecure=1&type=tcp&security=tls&encryption=none&flow=xtls-rprx-vision#🇵🇰 Антизаглушка
