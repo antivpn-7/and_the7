@@ -1,4 +1,37 @@
-#profile-title: ADAM_VPN | АНТИЗАГЛУШКА
+profile-title:АНТИЗАГЛУШКА 
+
+#profile-update-interval: 1
+
+
+
+#support-url:https://wa.me/79659571323
+
+#profile-web-page-url:https://wa.me/79659571323
+
+#subscription-userinfo: upload=1; download=1; total=1; expire=999999999999999
+
+#profile-notice: ━━━━━━━━━━━━━━━\n  \n━━━━━━━━━━━━━━━\n🛡 Статус: Активен\n🚀 Трафик: Безлимитный\n⚡ Скорость: Максимальная\n━━━━━━━━━━━━━━━
+
+#profile-icon: https://share.google/Kl64QMcBQApgnH6aJ
+
+#profile-test-url: http://cp.cloudflare.com/generate_204
+
+#profile-test-interval: 300
+
+#profile-auto-switch: true
+
+#profile-allow-copy: false
+
+#profile-locked: true
+
+#profile-read-only: true
+
+#profile-prefer-ipv4: true
+
+#auto-continue: true
+
+#announce:Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!
+
 happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN
 
 #profile-subscription-url: https://raw.githubusercontent.com/antivpn-7/and_the7/main/README.md
