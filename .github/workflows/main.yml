@@ -1,8 +1,8 @@
-name: Simple Sync Keys
+name: Multi-Source Sync Keys
 
 on:
   schedule:
-    - cron: "*/15 * * * *" # Проверка каждые 15 минут
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -11,53 +11,57 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Fetch and Append
+      - name: Fetch and Append Keys
         run: |
-          # 1. Скачиваем ключи из чужого источника
-          curl -L -s "https://vpn.tgflovv.ru:8443/sub/a231c089-9065-4525-a226-bb4f4fd487d2" -o incoming.txt
-          
-          # Декодируем, если это Base64
-          if ! grep -q "://" incoming.txt; then
-            base64 -d incoming.txt > raw_new.txt 2>/dev/null || cp incoming.txt raw_new.txt
-          else
-            cp incoming.txt raw_new.txt
-          fi
+          # --- СПИСОК ТВОИХ ССЫЛОК ---
+          SOURCES=(
+            "https://vpn.tgflovv.ru:8443/sub/a231c089-9065-4525-a226-bb4f4fd487d2"
+            "https://vpn.tgflovv.ru:8443/free-white-ru/46c6baae-ed09-4000-bb69-f63f1c100fbf"
+            "https://vpn.tgflovv.ru:8443/free-white/46c6baae-ed09-4000-bb69-f63f1c100fbf"
+          )
+          # ---------------------------
 
-          # 2. Сохраняем всё, что сейчас есть в твоем README.md (твои личные ключи)
+          # 1. Сначала сохраняем твой текущий README (со всеми твоими настройками)
           touch README.md
-          grep "://" README.md > current_keys.txt || touch current_keys.txt
+          
+          # 2. Собираем только URL-адреса ключей, которые уже есть в файле (для проверки на дубли)
+          grep "://" README.md | cut -d'#' -f1 > existing_urls.txt || touch existing_urls.txt
 
-          # 3. Фильтруем новые ключи, чтобы не было дублей и мусора
-          > to_add.txt
+          # 3. Собираем новые ключи из всех источников
+          > all_raw_new.txt
+          for url in "${SOURCES[@]}"; do
+            echo "Fetching from $url..."
+            curl -L -s "$url" -o temp_sub.txt
+            if ! grep -q "://" temp_sub.txt; then
+              base64 -d temp_sub.txt >> all_raw_new.txt 2>/dev/null || cat temp_sub.txt >> all_raw_new.txt
+            else
+              cat temp_sub.txt >> all_raw_new.txt
+            fi
+          done
+
+          # 4. Фильтруем: берем только уникальные ключи, которых У ТЕБЯ ЕЩЕ НЕТ
+          > to_append.txt
           while IFS= read -r line; do
             if [[ $line =~ ^(vless|vmess|trojan|ss|hysteria2|tuic):// ]]; then
-              # Чистим ссылку от старого названия
               CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
-              
-              # Проверяем, нет ли такого ключа уже в твоем списке
-              if ! grep -q "$CLEAN_URL" current_keys.txt; then
-                echo "${CLEAN_URL}#🇵🇰 Антизаглушка" >> to_add.txt
+              # Если этого URL нет в нашем списке существующих — добавляем
+              if ! grep -q "$CLEAN_URL" existing_urls.txt; then
+                echo "${CLEAN_URL}#🇵🇰 Антизаглушка" >> to_append.txt
+                # Сразу помечаем как "уже добавленный", чтобы не было дублей внутри одного прохода
+                echo "$CLEAN_URL" >> existing_urls.txt
               fi
             fi
-          done < raw_new.txt
+          done < all_raw_new.txt
 
-          # 4. Пересобираем README.md
-          # Оставляем только технический заголовок в самом верху
-          echo "#profile-title: ADAM_VPN | АНТИЗАГЛУШКА" > README.md
-          echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> README.md
-          echo "" >> README.md
-          
-          # Сначала твои ключи (которые были в файле)
-          cat current_keys.txt >> README.md
-          
-          # В самый низ — новые ключи из панели
-          cat to_add.txt >> README.md
+          # 5. Просто дописываем новые ключи в самый низ твоего файла
+          # Твой трафик, название и личные ключи остаются сверху нетронутыми
+          cat to_append.txt >> README.md
 
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add README.md
-          git commit -m "Just sync keys to bottom" || exit 0
+          git commit -m "Sync keys from 3 sources to bottom" || exit 0
           git push origin main --force
           
