@@ -1,67 +1,81 @@
-name: Multi-Source Sync Keys
+name: Multi-Source Sync & Health Check
 
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "0 */1 * * *" # Проверка раз в час (чаще не стоит, чтобы GitHub не забанил за нагрузку)
   workflow_dispatch:
 
 jobs:
-  sync:
+  check-and-sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Fetch and Append Keys
+      - name: Install Checker
         run: |
-          # --- СПИСОК ТВОИХ ССЫЛОК ---
+          # Устанавливаем инструмент для проверки ключей
+          curl -L https://github.com/v2fly/v2ray-core/releases/latest/download/v2ray-linux-64.zip -o v2ray.zip
+          unzip v2ray.zip && chmod +x v2ray
+
+      - name: Fetch and Check Keys
+        run: |
+          # 1. Ссылки на источники
           SOURCES=(
             "https://vpn.tgflovv.ru:8443/sub/a231c089-9065-4525-a226-bb4f4fd487d2"
             "https://vpn.tgflovv.ru:8443/free-white-ru/46c6baae-ed09-4000-bb69-f63f1c100fbf"
             "https://vpn.tgflovv.ru:8443/free-white/46c6baae-ed09-4000-bb69-f63f1c100fbf"
           )
-          # ---------------------------
 
-          # 1. Сначала сохраняем твой текущий README (со всеми твоими настройками)
-          touch README.md
-          
-          # 2. Собираем только URL-адреса ключей, которые уже есть в файле (для проверки на дубли)
-          grep "://" README.md | cut -d'#' -f1 > existing_urls.txt || touch existing_urls.txt
-
-          # 3. Собираем новые ключи из всех источников
-          > all_raw_new.txt
+          # 2. Собираем всё в один файл
+          > all_raw.txt
           for url in "${SOURCES[@]}"; do
-            echo "Fetching from $url..."
-            curl -L -s "$url" -o temp_sub.txt
-            if ! grep -q "://" temp_sub.txt; then
-              base64 -d temp_sub.txt >> all_raw_new.txt 2>/dev/null || cat temp_sub.txt >> all_raw_new.txt
+            curl -L -s "$url" -o temp.txt
+            if ! grep -q "://" temp.txt; then
+              base64 -d temp.txt >> all_raw.txt 2>/dev/null || cat temp.txt >> all_raw.txt
             else
-              cat temp_sub.txt >> all_raw_new.txt
+              cat temp.txt >> all_raw.txt
             fi
           done
 
-          # 4. Фильтруем: берем только уникальные ключи, которых У ТЕБЯ ЕЩЕ НЕТ
-          > to_append.txt
+          # 3. Сохраняем твои текущие ключи (их проверять не будем, они всегда в приоритете)
+          touch README.md
+          grep "://" README.md | grep -v "🇵🇰 Антизаглушка" > my_own_keys.txt || touch my_own_keys.txt
+          
+          # 4. Простая проверка доступности порта (TCP Check)
+          # Это отсеет 90% мертвых серверов
+          > alive_keys.txt
           while IFS= read -r line; do
-            if [[ $line =~ ^(vless|vmess|trojan|ss|hysteria2|tuic):// ]]; then
-              CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
-              # Если этого URL нет в нашем списке существующих — добавляем
-              if ! grep -q "$CLEAN_URL" existing_urls.txt; then
-                echo "${CLEAN_URL}#🇵🇰 Антизаглушка" >> to_append.txt
-                # Сразу помечаем как "уже добавленный", чтобы не было дублей внутри одного прохода
-                echo "$CLEAN_URL" >> existing_urls.txt
+            if [[ $line =~ ^(vless|vmess|trojan|ss):// ]]; then
+              # Извлекаем адрес сервера и порт
+              HOST=$(echo "$line" | sed -e 's/.*@//' -e 's/:.*//' -e 's/\/.*//')
+              PORT=$(echo "$line" | sed -e 's/.*://' -e 's/[?#\/].*//')
+              
+              # Пингуем порт сервера (таймаут 2 секунды)
+              if timeout 2s bash -c "true &>/dev/null > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
+                CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
+                echo "${CLEAN_URL}#🇵🇰 Антизаглушка" >> alive_keys.txt
               fi
             fi
-          done < all_raw_new.txt
+          done < all_raw.txt
 
-          # 5. Просто дописываем новые ключи в самый низ твоего файла
-          # Твой трафик, название и личные ключи остаются сверху нетронутыми
-          cat to_append.txt >> README.md
+          # 5. Сборка файла (Сохраняем твои заголовки и твои ключи)
+          # Берем первые 5 строк (заголовки) из старого файла
+          head -n 5 README.md | grep "#" > new_readme.md
+          echo "" >> new_readme.md
+          
+          # Добавляем твои личные ключи
+          cat my_own_keys.txt >> new_readme.md
+          
+          # Добавляем только ЖИВЫЕ ключи из панелей
+          cat alive_keys.txt | sort -u >> new_readme.md
+          
+          mv new_readme.md README.md
 
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add README.md
-          git commit -m "Sync keys from 3 sources to bottom" || exit 0
+          git commit -m "Auto-check: removed dead keys" || exit 0
           git push origin main --force
           
