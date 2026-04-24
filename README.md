@@ -34,11 +34,7 @@ profile-title:АНТИЗАГЛУШКА
 
 happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN
 
-#profile-subscription-url: https://raw.githubusercontent.com/antivpn-7/and_the7/main/README.md
-#support-url:https://wa.me/79659571323
-#profile-web-page-url:https://wa.me/79659571323
-#profile-icon: https://share.google/Kl64QMcBQApgnH6aJ
-#profile-test-url: http://cp.cloudflare.com/generate_204
+
 vless://aed996ff-eca0-4d4a-b2f3-01362ec4d48d@193.188.23.65:443?type=tcp&headerType=none&security=reality&fp=chrome&sni=yandex.ru&pbk=KIRFKsdto8opnbRdEcTtsc3m-mTwW9L_Gnk5DSwrWx0&sid=b8960f8a008648c1#🇩🇪 ⚡ Основной 
 vless://aed996ff-eca0-4d4a-b2f3-01362ec4d48d@72.56.240.250:2443?type=tcp&headerType=none&security=reality&fp=chrome&sni=yandex.ru&pbk=NGXEKZXsnI0yWLAG4Qj6XKSVkDpqN_UaKsW5yJPMBUc#🇷🇺 ⚔️ Запасной #1
 vless://aed996ff-eca0-4d4a-b2f3-01362ec4d48d@72.56.245.52:2443?type=tcp&headerType=none&security=reality&fp=chrome&sni=yandex.ru&pbk=NGXEKZXsnI0yWLAG4Qj6XKSVkDpqN_UaKsW5yJPMBUc#🇫🇮 ⚔️ Запасной #2
