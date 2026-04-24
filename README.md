@@ -1,1 +1,30 @@
-# -
+#subscription-userinfo: upload=17301504000; download=17301504000; total=1125899906842624; expire=3803572800
+#profile-title: ADAM_VPN | АНТИЗАГЛУШКА
+happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN
+
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@ru.tgflovv.ru:443?hiddify=1&sni=max.ru&type=tcp&alpn=http%2F1.1&host=max.ru&encryption=none&fp=chrome&headerType=none&flow=xtls-rprx-vision&security=reality&pbk=dnLLXzjeK60Uc_3ERBlnWIKRGmbXn9b--vn5Yl-LfVI&sid=6fb05d1f3a#🇷🇺 Антизаглушка №1
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@ru.tgflovv.ru:443?hiddify=1&sni=yandex.ru&type=tcp&alpn=http%2F1.1&host=yandex.ru&encryption=none&fp=chrome&headerType=none&flow=xtls-rprx-vision&security=reality&pbk=dnLLXzjeK60Uc_3ERBlnWIKRGmbXn9b--vn5Yl-LfVI&sid=6fb05d1f3a#🇷🇺 Антизаглушка №2
+ss://MjAyMi1ibGFrZTMtYWVzLTI1Ni1nY206T1RoaFpEZ3hNMkZrTWpWbU5EYzFOamxrWldaaFlXRTRObUkyTTJVM05EST06WVRJek1XTXdPRGs1TURZMU5EVXlOV0V5TWpaaVlqUm1OR1prTkRnM1pEST0=@85.239.38.170:31675#🌐 Антизаглушка №3
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@vpn.tgflovv.ru:443?hiddify=1&sni=vpn.tgflovv.ru&type=ws&alpn=http%2F1.1&path=%2FEXfE3H8UT1R6TWv9v&host=vpn.tgflovv.ru&encryption=none&fp=chrome&headerType=none&allowInsecure=true&insecure=true&security=tls#🇷🇺 Антизаглушка №4
+ss://MjAyMi1ibGFrZTMtYWVzLTI1Ni1nY206TXpRd05XTXhabVExWVRObE5EUXlPR0l3T1RGallUVXlPV016TjJZMU9UWT06WVRJek1XTXdPRGs1TURZMU5EVXlOV0V5TWpaaVlqUm1OR1prTkRnM1pEST0=@vpn.tgflovv.ru:30453#🇷🇺 Антизаглушка №5
+hysteria2://a231c089-9065-4525-a226-bb4f4fd487d2@vpn.tgflovv.ru:36873?hiddify=1&obfs=salamander&obfs-password=uUpjpRk6HbQ2M&sni=vpn.tgflovv.ru&insecure=1&allow_insecure=1#🇷🇺 Антизаглушка №6
+naive://a231c089-9065-4525-a226-bb4f4fd487d2:h@vpn.tgflovv.ru:443/?security=tls&sni=vpn.tgflovv.ru&uot=1&header=hiddify-naive-secret:/eEtz05LnWI6bwl#🇷🇺 Антизаглушка №7
+mieru://a231c089-9065-4525-a226-bb4f4fd487d2:h@vpn.tgflovv.ru/?handshake-mode=HANDSHAKE_NO_WAIT&mtu=1400&multiplexing=MULTIPLEXING_HIGH&port=11098-11101&protocol=TCP#🇷🇺 Антизаглушка №8
+mieru://a231c089-9065-4525-a226-bb4f4fd487d2:h@vpn.tgflovv.ru/?handshake-mode=HANDSHAKE_NO_WAIT&mtu=1400&multiplexing=MULTIPLEXING_HIGH&port=51841-51844&protocol=UDP#🇷🇺 Антизаглушка №9
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@rudostup.tgflovv.ru:443?hiddify=1&sni=rudostup.tgflovv.ru&type=tcp&alpn=http%2F1.1&path=%2FV9hPLVk6iDK9GhmiP0o4&host=rudostup.tgflovv.ru&encryption=none&fp=chrome&headerType=none&allowInsecure=true&insecure=true&security=tls#🇷🇺 Антизаглушка №10
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@rudostup.tgflovv.ru:443?hiddify=1&sni=rudostup.tgflovv.ru&type=grpc&alpn=h2&path=V9hPLVk6iDK9GRr8AkhbmW902qXY&host=rudostup.tgflovv.ru&serviceName=V9hPLVk6iDK9GRr8AkhbmW902qXY&mode=gun&encryption=none&fp=chrome&headerType=none&allowInsecure=true&insecure=true&security=tls#🇷🇺 Антизаглушка №11
+ss://MjAyMi1ibGFrZTMtYWVzLTI1Ni1nY206TnpjNE1tWmtZVGs0TnpNMU5ETTBaamxpT1RWaFpUTmtOVGRpTm1Gall6Yz06WVRJek1XTXdPRGs1TURZMU5EVXlOV0V5TWpaaVlqUm1OR1prTkRnM1pEST0=@rudostup.tgflovv.ru:17460#🇷🇺 Антизаглушка №12
+hysteria2://a231c089-9065-4525-a226-bb4f4fd487d2@rudostup.tgflovv.ru:43033?hiddify=1&obfs=salamander&obfs-password=q1MxbQuFBVqxmhqenKWqhDIYrPjLaz&sni=rudostup.tgflovv.ru&insecure=1&allow_insecure=1#🇷🇺 Антизаглушка №13
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@rudostup.tgflovv.ru:443?hiddify=1&sni=ads.x5.ru&type=tcp&alpn=http%2F1.1&host=ads.x5.ru&encryption=none&fp=chrome&headerType=none&flow=xtls-rprx-vision&security=reality&pbk=ufunjvjwHQ5AbHAF03i3RxjOof5P23ALLsbGlrU7Uik&sid=e90fc4a152dd45#🇷🇺 Антизаглушка №14
+ss://MjAyMi1ibGFrZTMtYWVzLTI1Ni1nY206TXpVNVlUUm1ZbVkzWW1Ga05EWTRNbUppWVRrNVpUSTVaRFkxTkRjM05tRT06WVRJek1XTXdPRGs1TURZMU5EVXlOV0V5TWpaaVlqUm1OR1prTkRnM1pEST0=@usa.tgflovv.ru:16649#🇷🇺 Антизаглушка №15
+hysteria2://a231c089-9065-4525-a226-bb4f4fd487d2@usa.tgflovv.ru:13089?hiddify=1&obfs=salamander&obfs-password=Vlb9X6uGxZ399VjJ&sni=usa.tgflovv.ru&insecure=1&allow_insecure=1#🇷🇺 Антизаглушка №16
+vless://a231c089-9065-4525-a226-bb4f4fd487d2@usa.tgflovv.ru:443?hiddify=1&sni=ads.x5.ru&type=tcp&alpn=http%2F1.1&host=ads.x5.ru&encryption=none&fp=chrome&headerType=none&flow=xtls-rprx-vision&security=reality&pbk=kp75UxUgf3_WDz0Ex-SC-T65VhhYmHMggKS1zlXMlkA&sid=5cd7#🇷🇺 Антизаглушка №17
+ss://bm9uZTozZTk2ZWY3ZC04NjM3LTQyYzItYWM3My03NTE4MjE5NmU3NTU@212.192.215.229:8443?plugin=v2ray-plugin%3Bmode%3Dwebsocket%3Bhost%3Dmfvpn.fuchen.indevs.in%3Bpath%3D3e96ef7d-8637-42c2-ac73-75182196e755%2F%3Fed%5C%3D2560%3Btls%3Bmux%3D0#🌐 Антизаглушка №18
+vless://b37556e3-38aa-4311-af42-88e550229a77@205.237.107.184:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=randomized&sni=to-do.digital&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU#🌐 Антизаглушка №19
+vless://b3958b4a-305b-49f3-953e-b0fc3c21f738@205.237.107.185:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=randomized&sni=to-do.digital&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU#🌐 Антизаглушка №20
+vless://d970a4cf-c2b0-4d1a-9f73-5ac2d70b930d@205.237.107.161:443?type=tcp&security=reality&encryption=none&flow=xtls-rprx-vision&fp=randomized&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU&sni=to-do.digital#🌐 Антизаглушка №21
+vless://5b05f70d-c2db-4a0d-b48c-b5576663baf6@205.237.107.185:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=randomized&sni=to-do.digital&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU#🌐 Антизаглушка №22
+vless://5b05f70d-c2db-4a0d-b48c-b5576663baf6@205.237.107.192:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=randomized&sni=to-do.digital&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU#🌐 Антизаглушка №23
+vless://b37556e3-38aa-4311-af42-88e550229a77@205.237.107.160:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=randomized&sni=to-do.digital&pbk=yAIZa8Fp4M4KR2WgH4fObtHF-JMTCxDNKNib5yIZVmU#🌐 Антизаглушка №24
+vless://711f1871-97d8-483c-a88f-4768d36f33bb@185.189.46.98:443?type=tcp&headerType=none&security=reality&encryption=none&sni=hvec.normbot.ru&fp=chrome&pbk=pgG2grngQEtOFJImLfz0AEm-O2IodM2jCY4aMCYQI1U&sid=0a8428f5ab26ef5a&flow=xtls-rprx-vision#🇷🇺 Антизаглушка №25
+vless://75807638-6f19-07d0-ae08-38492ee85c88@178.72.181.52:52006?allowInsecure=1&type=tcp&security=tls&encryption=none&flow=xtls-rprx-vision#🌐 Антизаглушка №26
