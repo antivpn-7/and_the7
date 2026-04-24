@@ -3,6 +3,7 @@
 happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN
 
 happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN
+happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN
 #support-url:https://wa.me/79659571323
 #profile-web-page-url:https://wa.me/79659571323
 #profile-icon: https://share.google/Kl64QMcBQApgnH6aJ
@@ -452,4 +453,5 @@ vless://a1317244-4ab8-47ac-9070-7513f49a5732@158.160.50.212:8443?flow=xtls-rprx-
 vless://74d3057f-5d2b-4d21-8819-3b387d47c0a4@5.188.224.69:2083?encryption=none&type=grpc&security=reality&mode=gun&serviceName=UpdateService&fp=chrome&sni=ir.ozone.ru&pbk=J6NuOlIq3ypdTFc1TMhDDKmF8BWPnNWZq1EkxD7K-lQ&sid=6da16b1335651b38#АНТИЗАГЛУШКА 🐺
 vless://75807638-6f19-07d0-ae08-38492ee85c88@cluster-russia-1.firstvideocdn.ru:52006?&security=tls&flow=xtls-rprx-vision&fp=chrome&sni=cluster-russia-1.firstvideocdn.ru&type=tcp&headerType=none&host=cluster-russia-1.firstvideocdn.ru&path=%2F#АНТИЗАГЛУШКА 🐺
 vless://3d2b27fc-38ed-4ec9-9eee-11acf6f3b7d4@84.201.178.45:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=chrome&sni=ads.x5.ru&pbk=hxpWlr-5EgNUPr__9gnoDdF9spsl4W4sfNKv_NJM_FY&sid=6ba85179e30d4fc2#АНТИЗАГЛУШКА 🐺
-vless://f437c54a-dd61-4800-9871-33cf54a20e38@109.248.168.81:443?type=tcp&security=reality&encryption=none&flow=xtls-rprx-vision&fp=chrome&pbk=82T2G1fUpXnrWXcriZxD0_O22QOvtQRIun_Cu6m6l2E&sni=vk.com#🇵🇰 АНТИЗАГЛУШКА №1
+vless://8a49f09b-8f5d-4295-8ecc-a552bd0a23f8@5.188.115.43:443?flow=xtls-rprx-vision&encryption=none&type=tcp&security=reality&fp=qq&sni=api-maps.yandex.ru&pbk=oqRus6Z_Q1jqJaTEPu7ENbRL0-XKOw54K0jwCCGLtEk&sid=a9c4f17e3b62d8#🇵🇰 АНТИЗАГЛУШКА №1
+vless://f437c54a-dd61-4800-9871-33cf54a20e38@109.248.168.81:443?type=tcp&security=reality&encryption=none&flow=xtls-rprx-vision&fp=chrome&pbk=82T2G1fUpXnrWXcriZxD0_O22QOvtQRIun_Cu6m6l2E&sni=vk.com#🇵🇰 АНТИЗАГЛУШКА №2
