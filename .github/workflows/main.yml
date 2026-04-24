@@ -2,7 +2,7 @@ name: Multi-Source Sync & Health Check
 
 on:
   schedule:
-    - cron: "0 */1 * * *" # Проверка раз в час (чаще не стоит, чтобы GitHub не забанил за нагрузку)
+    - cron: "0 */3 * * *" # Проверка раз в час (чаще не стоит, чтобы GitHub не забанил за нагрузку)
   workflow_dispatch:
 
 jobs:
