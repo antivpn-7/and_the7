@@ -1,4 +1,4 @@
-name: Multi-Source Sync & Health Check
+name: Sync 2 Sources with Numbering & Flag
 
 on:
   schedule:
@@ -11,27 +11,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Fetch and Check Keys
+      - name: Fetch, Check and Number Keys
         run: |
-          # 1. Список источников
+          # 1. Твои два источника
           SOURCES=(
-            "https://vpn.tgflovv.ru:8443/sub/a231c089-9065-4525-a226-bb4f4fd487d2"
             "https://vpn.tgflovv.ru:8443/free-white-ru/46c6baae-ed09-4000-bb69-f63f1c100fbf"
-            "https://vpn.tgflovv.ru:8443/free-white/46c6baae-ed09-4000-bb69-f63f1c100fbf"
-            "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/Vless-Reality-White-Lists-Rus-Mobile-2.txt"
             "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/WHITE-SNI-RU-all.txt"
-            "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/main/Vless-Reality-White-Lists-Rus-Mobile.txt"
           )
 
-          # 2. Сохраняем твои личные ключи
+          # 2. Сохраняем твои личные ключи (те, что без флага 🇵🇰)
           touch README.md
-          grep "://" README.md | grep -v "АНТИЗАГЛУШКА" > my_own_keys.txt || touch my_own_keys.txt
+          grep "://" README.md | grep -v "🇵🇰 АНТИЗАГЛУШКА" > my_own_keys.txt || touch my_own_keys.txt
           
           # Собираем существующие URL для проверки на дубли
           cut -d'#' -f1 my_own_keys.txt > existing_urls.txt
 
           # 3. Качаем и проверяем новые ключи
           > alive_keys.txt
+          COUNT=1  # Счетчик для нумерации
+          
           for url in "${SOURCES[@]}"; do
             curl -L -s "$url" -o temp.txt
             if ! grep -q "://" temp.txt; then
@@ -47,10 +45,12 @@ jobs:
                 PORT=$(echo "$CLEAN_URL" | sed -e 's/.*://' -e 's/[?#\/].*//')
                 
                 if ! grep -q "$CLEAN_URL" existing_urls.txt; then
+                  # Проверка живучести (TCP Ping 1 сек)
                   if timeout 1s bash -c "true &>/dev/null > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
-                    # Ставим твое название на каждый новый ключ
-                    echo "${CLEAN_URL}#АНТИЗАГЛУШКА 🐺" >> alive_keys.txt
+                    # Добавляем флаг, название и номер
+                    echo "${CLEAN_URL}#🇵🇰 АНТИЗАГЛУШКА №$COUNT" >> alive_keys.txt
                     echo "$CLEAN_URL" >> existing_urls.txt
+                    COUNT=$((COUNT + 1))
                   fi
                 fi
               fi
@@ -65,10 +65,10 @@ jobs:
           echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> new_readme.md
           echo "" >> new_readme.md
           
-          # Твои личные сервера сверху
+          # Сначала твои личные сервера (Основной и т.д.)
           cat my_own_keys.txt >> new_readme.md
           
-          # Остальные рабочие сервера снизу
+          # Затем пронумерованные рабочие ключи из источников
           cat alive_keys.txt >> new_readme.md
           
           mv new_readme.md README.md
@@ -78,6 +78,6 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add README.md
-          git commit -m "Update title to АНТИЗАГЛУШКА 🐺" || exit 0
+          git commit -m "Update: numbered keys with 🇵🇰 flag" || exit 0
           git push origin main --force
           
