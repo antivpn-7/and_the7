@@ -1,76 +1,63 @@
-name: Update Traffic and Rename Keys with Flags
+name: Simple Sync Keys
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/15 * * * *" # Проверка каждые 15 минут
   workflow_dispatch:
 
 jobs:
-  update:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Update Info, Fetch and Rename Keys
+      - name: Fetch and Append
         run: |
-          # 1. Считаем трафик
-          START_DATE=$(date -d "2026-04-22 20:00:00" +%s)
-          NOW=$(date +%s)
-          SECONDS_DIFF=$(( NOW - START_DATE ))
-          if [ $SECONDS_DIFF -lt 0 ]; then SECONDS_DIFF=0; fi
-          HOURS_PASSED=$(( SECONDS_DIFF / 3600 ))
-          BASE_TRAFFIC=524288000
-          HOURLY_ADD=$(( HOURS_PASSED * 524288000 ))
-          TOTAL_USED=$(( BASE_TRAFFIC + HOURLY_ADD ))
+          # 1. Скачиваем ключи из чужого источника
+          curl -L -s "https://vpn.tgflovv.ru:8443/sub/a231c089-9065-4525-a226-bb4f4fd487d2" -o incoming.txt
           
-          # 2. Скачиваем ключи
-          curl -L -s "https://vpn.tgflovv.ru:8443/sub/a231c089-9065-4525-a226-bb4f4fd487d2" -o fetched_keys.txt
-          
-          if ! grep -q "://" fetched_keys.txt; then
-            base64 -d fetched_keys.txt > raw_keys.txt 2>/dev/null || cp fetched_keys.txt raw_keys.txt
+          # Декодируем, если это Base64
+          if ! grep -q "://" incoming.txt; then
+            base64 -d incoming.txt > raw_new.txt 2>/dev/null || cp incoming.txt raw_new.txt
           else
-            cp fetched_keys.txt raw_keys.txt
+            cp incoming.txt raw_new.txt
           fi
 
-          # 3. УМНОЕ ПЕРЕИМЕНОВАНИЕ С ФЛАГАМИ
-          # Скрипт ищет код страны в адресе и ставит флаг
-          i=1
-          > keys.txt
+          # 2. Сохраняем всё, что сейчас есть в твоем README.md (твои личные ключи)
+          touch README.md
+          grep "://" README.md > current_keys.txt || touch current_keys.txt
+
+          # 3. Фильтруем новые ключи, чтобы не было дублей и мусора
+          > to_add.txt
           while IFS= read -r line; do
-            if [[ $line == *"://"* ]]; then
-              FLAG="🌐"
-              [[ $line == *".de"* || $line == *"germany"* ]] && FLAG="🇩🇪"
-              [[ $line == *".nl"* || $line == *"netherlands"* ]] && FLAG="🇳🇱"
-              [[ $line == *".fi"* || $line == *"finland"* ]] && FLAG="🇫🇮"
-              [[ $line == *".us"* || $line == *"usa"* ]] && FLAG="🇺🇸"
-              [[ $line == *".tr"* || $line == *"turkey"* ]] && FLAG="🇹🇷"
-              [[ $line == *".kz"* || $line == *"kazakhstan"* ]] && FLAG="🇰🇿"
-              [[ $line == *".ru"* || $line == *"russia"* ]] && FLAG="🇷🇺"
-              
-              # Убираем старое имя и ставим наше: Флаг + Антизаглушка №
+            if [[ $line =~ ^(vless|vmess|trojan|ss|hysteria2|tuic):// ]]; then
+              # Чистим ссылку от старого названия
               CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
-              echo "${CLEAN_URL}#${FLAG} Антизаглушка №${i}" >> keys.txt
-              ((i++))
+              
+              # Проверяем, нет ли такого ключа уже в твоем списке
+              if ! grep -q "$CLEAN_URL" current_keys.txt; then
+                echo "${CLEAN_URL}#🇵🇰 Антизаглушка" >> to_add.txt
+              fi
             fi
-          done < raw_keys.txt
+          done < raw_new.txt
 
-          # 4. Шапка
-          INFO_LINE="#subscription-userinfo: upload=$TOTAL_USED; download=$TOTAL_USED; total=1125899906842624; expire=3803572800"
-          TITLE_LINE="#profile-title: ADAM_VPN | АНТИЗАГЛУШКА"
-          ROUTING_LINE="happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN"
-
-          # 5. Сборка
-          echo "$INFO_LINE" > README.md
-          echo "$TITLE_LINE" >> README.md
-          echo "$ROUTING_LINE" >> README.md
+          # 4. Пересобираем README.md
+          # Оставляем только технический заголовок в самом верху
+          echo "#profile-title: ADAM_VPN | АНТИЗАГЛУШКА" > README.md
+          echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> README.md
           echo "" >> README.md
-          cat keys.txt >> README.md
+          
+          # Сначала твои ключи (которые были в файле)
+          cat current_keys.txt >> README.md
+          
+          # В самый низ — новые ключи из панели
+          cat to_add.txt >> README.md
 
-      - name: Commit changes
+      - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add README.md
-          git commit -m "Sync with flags" || exit 0
+          git commit -m "Just sync keys to bottom" || exit 0
           git push origin main --force
           
