@@ -1,4 +1,4 @@
-name: Sync Russian Keys from GitHub Sources
+name: Sync 1 Source with Random Flags & Numbering
 
 on:
   schedule:
@@ -11,26 +11,30 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Fetch and Filter Russian Keys
+      - name: Fetch, Check and Style Keys
         run: |
-          # 1. Твои новые источники GitHub
+          # 1. Твои источники
           SOURCES=(
             "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/Vless-Reality-White-Lists-Rus-Mobile.txt"
             "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/Vless-Reality-White-Lists-Rus-Mobile-2.txt"
           )
 
-          # 2. Сохраняем твои личные ключи (без фразы "ОБХОД БЛОКИРОВКИ")
+          # Список флага для разнообразия
+          FLAGS=("🇺🇸" "🇩🇪" "🇫🇮" "🇵🇱" "🇳🇱" "🇬🇧" "🇫🇷" "🇰🇿" "🇹🇷" "🇸🇪" "🇦🇹" "🇨🇿")
+
+          # 2. Сохраняем твои личные ключи (те, где нет ракеты 🚀)
           touch README.md
-          grep "://" README.md | grep -v "ОБХОД БЛОКИРОВКИ" > my_own_keys.txt || touch my_own_keys.txt
+          grep "://" README.md | grep -v "🚀" > my_own_keys.txt || touch my_own_keys.txt
+          
+          # Собираем существующие URL для проверки на дубли
           cut -d'#' -f1 my_own_keys.txt > existing_urls.txt
 
-          # 3. Качаем и фильтруем только ключи с флагом РФ
+          # 3. Качаем и проверяем новые ключи
           > alive_keys.txt
           COUNT=1
           
           for url in "${SOURCES[@]}"; do
             curl -L -s "$url" -o temp.txt
-            # Проверка на base64 (на GitHub обычно raw текст, но оставим для надежности)
             if ! grep -q "://" temp.txt; then
               base64 -d temp.txt > raw_temp.txt 2>/dev/null || cp temp.txt raw_temp.txt
             else
@@ -39,19 +43,16 @@ jobs:
 
             while IFS= read -r line; do
               if [[ $line =~ ^(vless|vmess|trojan|ss):// ]]; then
-                # Фильтр: только если в оригинале был флаг 🇷🇺
-                if [[ "$line" == *"🇷🇺"* ]]; then
-                  CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
-                  HOST=$(echo "$CLEAN_URL" | sed -e 's/.*@//' -e 's/:.*//' -e 's/\/.*//')
-                  PORT=$(echo "$CLEAN_URL" | sed -e 's/.*://' -e 's/[?#\/].*//')
-                  
-                  # Проверка на дубли и доступность
-                  if ! grep -q "$CLEAN_URL" existing_urls.txt; then
-                    if timeout 1s bash -c "true &>/dev/null > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
-                      echo "${CLEAN_URL}#🇪🇺 ОБХОД БЛОКИРОВКИ №$COUNT" >> alive_keys.txt
-                      echo "$CLEAN_URL" >> existing_urls.txt
-                      COUNT=$((COUNT + 1))
-                    fi
+                CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
+                HOST=$(echo "$CLEAN_URL" | sed -e 's/.*@//' -e 's/:.*//' -e 's/\/.*//')
+                PORT=$(echo "$CLEAN_URL" | sed -e 's/.*://' -e 's/[?#\/].*//')
+                
+                if ! grep -q "$CLEAN_URL" existing_urls.txt; then
+                  if timeout 1s bash -c "true &>/dev/null > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
+                    RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
+                    echo "${CLEAN_URL}#${RANDOM_FLAG} Antizaglushka 🚀 №$COUNT" >> alive_keys.txt
+                    echo "$CLEAN_URL" >> existing_urls.txt
+                    COUNT=$((COUNT + 1))
                   fi
                 fi
               fi
@@ -62,12 +63,15 @@ jobs:
           TRAFFIC_LINE=$(grep "#subscription-userinfo" README.md || echo "#subscription-userinfo: upload=0; download=0; total=1125899906842624; expire=3803572800")
           
           echo "$TRAFFIC_LINE" > new_readme.md
-          echo "#profile-title: Start vpn" >> new_readme.md
+          echo "#profile-title: the energy vpn" >> new_readme.md
           echo "#announce:Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!" >> new_readme.md
           echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> new_readme.md
           echo "" >> new_readme.md
           
+          # Твои личные сервера (Основной и т.д.) стоят первыми
           cat my_own_keys.txt >> new_readme.md
+          
+          # Новые сервера
           cat alive_keys.txt >> new_readme.md
           
           mv new_readme.md README.md
@@ -77,6 +81,6 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add README.md
-          git commit -m "Update: RU sources from GitHub, numbering enabled" || exit 0
+          git commit -m "Update: single source speed, random flags and numbering" || exit 0
           git push origin main --force
           
