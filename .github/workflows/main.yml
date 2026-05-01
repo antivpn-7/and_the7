@@ -1,62 +1,77 @@
-name: Sync 1 Source with Random Flags & Numbering
+Name: Sync 1 Source with Random Flags & Numbering
 
 on:
   schedule:
-    - cron: "0 * * * *" 
+    - cron: "0 */1 * * *" 
   workflow_dispatch:
 
 jobs:
   check-and-sync:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - name: Fetch and Decode
+      - name: Fetch, Check and Style Keys
         run: |
+          # 1. Твой НОВЫЙ источник
           SOURCE_URL="https://vpn.tgflovv.ru:8443/free-speed/3e6ec68a-567b-47cf-95e9-d0e925a935b5"
+
+          # Список флагов (🇸🇴 в приоритете)
           FLAGS=("🇸🇴" "🇸🇴" "🇸🇴" "🇺🇸" "🇩🇪" "🇫🇮" "🇵🇱" "🇳🇱" "🇬🇧" "🇫🇷" "🇰🇿" "🇹🇷" "🇸🇪" "🇦🇹" "🇨🇿")
 
+          # 2. Сохраняем личные ключи
           touch README.md
-          # 1. Сохраняем свои ключи
-          grep "://" README.md | grep -v "Обход Блокировок" > my_own_keys.txt || touch my_own_keys.txt
-          
-          # 2. Качаем ту самую "кашу" со скрина
-          curl -L -k -s "$SOURCE_URL" -o raw.txt
-          
-          # 3. Декодируем (чистим от пробелов и переносов)
-          cat raw.txt | tr -d '[:space:]' > clean_base64.txt
-          base64 -d clean_base64.txt > decoded.txt 2>/dev/null || cp raw.txt decoded.txt
+          grep "://" README.md | grep -v "🔗" > my_own_keys.txt || touch my_own_keys.txt
+          cut -d'#' -f1 my_own_keys.txt > existing_urls.txt
 
-          # 4. Собираем только ссылки
+          # 3. Качаем и декодируем
+          curl -L -s "$SOURCE_URL" -o raw_source.txt
+          if ! grep -q "://" raw_source.txt; then
+            base64 -d raw_source.txt > decoded_keys.txt 2>/dev/null || cp raw_source.txt decoded_keys.txt
+          else
+            cp raw_source.txt decoded_keys.txt
+          fi
+
+          # 4. Проверка и форматирование
           > alive_keys.txt
           COUNT=1
-          while IFS= read -r line; do
-            CLEAN_URL=$(echo "$line" | grep -oE "(vless|vmess|trojan|ss)://[^# ]+")
-            if [ ! -z "$CLEAN_URL" ]; then
-                RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
-                echo "${CLEAN_URL}#${RANDOM_FLAG} Обход Блокировок 🔗 $COUNT" >> alive_keys.txt
-                COUNT=$((COUNT + 1))
-            fi
-          done < decoded.txt
-
-          # 5. Сборка финального README
-          echo "#subscription-userinfo: upload=0; download=0; total=1125899906842624; expire=3803572800" > README.md
-          echo "#profile-title: Обход Блокировок" >> README.md
-          echo "#profile-update-interval: 1" >> README.md
-          echo "#announce:Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!" >> README.md
-          echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> README.md
-          echo "" >> README.md
           
-          cat my_own_keys.txt >> README.md
-          cat alive_keys.txt >> README.md
+          while IFS= read -r line; do
+            line=$(echo "$line" | tr -d '\r' | xargs)
+            if [[ $line =~ ^(vless|vmess|trojan|ss):// ]]; then
+              CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
+              HOST=$(echo "$CLEAN_URL" | sed -e 's/.*@//' -e 's/:.*//' -e 's/\/.*//')
+              PORT=$(echo "$CLEAN_URL" | sed -e 's/.*://' -e 's/[?#\/].*//')
+              
+              if [[ "$CLEAN_URL" == vmess://* ]]; then SKIP_PING=true; else SKIP_PING=false; fi
+
+              if ! grep -q "$CLEAN_URL" existing_urls.txt; then
+                if [ "$SKIP_PING" = true ] || timeout 1s bash -c "true &>/dev/null > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
+                  RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
+                  echo "${CLEAN_URL}#${RANDOM_FLAG} Обход Блокировок 🔗 №$COUNT" >> alive_keys.txt
+                  echo "$CLEAN_URL" >> existing_urls.txt
+                  COUNT=$((COUNT + 1))
+                fi
+              fi
+            fi
+          done < decoded_keys.txt
+
+          # 5. Сборка README
+          TRAFFIC_LINE=$(grep "#subscription-userinfo" README.md || echo "#subscription-userinfo: upload=0; download=0; total=1125899906842624; expire=3803572800")
+          echo "$TRAFFIC_LINE" > new_readme.md
+          echo "#profile-title: the energy vpn" >> new_readme.md
+          echo "#announce:Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!" >> new_readme.md
+          echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> new_readme.md
+          echo "" >> new_readme.md
+          cat my_own_keys.txt >> new_readme.md
+          cat alive_keys.txt >> new_readme.md
+          mv new_readme.md README.md
 
       - name: Commit and Push
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "action@github.com"
+          git config --local user.name "Github Action"
           git add README.md
-          git commit -m "Update $(date +'%H:%M')" || exit 0
-          git push origin HEAD --force
+          git commit -m "Update: New source and flags sync" || exit 0
+          git push origin main --force
           
