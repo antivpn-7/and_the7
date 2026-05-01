@@ -13,70 +13,50 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch and Decode Massive Source
+      - name: Fetch and Decode
         run: |
           SOURCE_URL="https://vpn.tgflovv.ru:8443/free-speed/3e6ec68a-567b-47cf-95e9-d0e925a935b5"
           FLAGS=("🇸🇴" "🇸🇴" "🇸🇴" "🇺🇸" "🇩🇪" "🇫🇮" "🇵🇱" "🇳🇱" "🇬🇧" "🇫🇷" "🇰🇿" "🇹🇷" "🇸🇪" "🇦🇹" "🇨🇿")
 
           touch README.md
-          # 1. Сохраняем твои личные ключи
+          # 1. Сохраняем свои ключи
           grep "://" README.md | grep -v "Обход Блокировок" > my_own_keys.txt || touch my_own_keys.txt
-          cut -d'#' -f1 my_own_keys.txt > existing_urls.txt || touch existing_urls.txt
-
-          # 2. Качаем ту самую "кашу" со скрина
-          curl -L -s -k "$SOURCE_URL" -o raw_source.txt
           
-          # 3. Декодируем (пробуем несколько раз, так как там может быть двойной Base64 или мусор)
-          if ! grep -q "://" raw_source.txt; then
-            # Убираем пробелы и переносы, если они есть в базе, и декодируем
-            cat raw_source.txt | tr -d '\n' | tr -d '\r' | base64 -d > decoded_keys.txt 2>/dev/null || cp raw_source.txt decoded_keys.txt
-          else
-            cp raw_source.txt decoded_keys.txt
-          fi
+          # 2. Качаем ту самую "кашу" со скрина
+          curl -L -k -s "$SOURCE_URL" -o raw.txt
+          
+          # 3. Декодируем (чистим от пробелов и переносов)
+          cat raw.txt | tr -d '[:space:]' > clean_base64.txt
+          base64 -d clean_base64.txt > decoded.txt 2>/dev/null || cp raw.txt decoded.txt
 
-          # 4. Собираем только живые ссылки
+          # 4. Собираем только ссылки
           > alive_keys.txt
           COUNT=1
-          # Читаем построчно то, что декодировали
           while IFS= read -r line; do
-            # Чистим строку
-            CLEAN_LINE=$(echo "$line" | tr -d '\r' | xargs)
-            
-            if [[ $CLEAN_LINE =~ ^(vless|vmess|trojan|ss):// ]]; then
-              CLEAN_URL=$(echo "$CLEAN_LINE" | cut -d'#' -f1)
-              
-              # Если такого ключа еще нет в твоих личных
-              if ! grep -Fxq "$CLEAN_URL" existing_urls.txt; then
+            CLEAN_URL=$(echo "$line" | grep -oE "(vless|vmess|trojan|ss)://[^# ]+")
+            if [ ! -z "$CLEAN_URL" ]; then
                 RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
                 echo "${CLEAN_URL}#${RANDOM_FLAG} Обход Блокировок 🔗 $COUNT" >> alive_keys.txt
                 COUNT=$((COUNT + 1))
-              fi
             fi
-          done < decoded_keys.txt
+          done < decoded.txt
 
-          # 5. Финальная сборка файла
-          TRAFFIC_LINE=$(grep "#subscription-userinfo" README.md || echo "#subscription-userinfo: upload=0; download=0; total=1125899906842624; expire=3803572800")
+          # 5. Сборка финального README
+          echo "#subscription-userinfo: upload=0; download=0; total=1125899906842624; expire=3803572800" > README.md
+          echo "#profile-title: Обход Блокировок" >> README.md
+          echo "#profile-update-interval: 1" >> README.md
+          echo "#announce:Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!" >> README.md
+          echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> README.md
+          echo "" >> README.md
           
-          echo "$TRAFFIC_LINE" > new_readme.md
-          echo "#profile-title: Обход Блокировок" >> new_readme.md
-          echo "#profile-update-interval: 1" >> new_readme.md
-          echo "#announce:Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!" >> new_readme.md
-          echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> new_readme.md
-          echo "" >> new_readme.md
-          
-          cat my_own_keys.txt >> new_readme.md
-          cat alive_keys.txt >> new_readme.md
-          mv new_readme.md README.md
+          cat my_own_keys.txt >> README.md
+          cat alive_keys.txt >> README.md
 
       - name: Commit and Push
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "Github Action"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add README.md
-          if git diff --staged --quiet; then
-            echo "Никаких изменений нет"
-          else
-            git commit -m "Update from massive source $(date)"
-            git push origin HEAD --force
-          fi
+          git commit -m "Update $(date +'%H:%M')" || exit 0
+          git push origin HEAD --force
           
