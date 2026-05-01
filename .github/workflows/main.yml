@@ -1,55 +1,34 @@
-name: ADAM VPN Encrypt Sync
-
-on:
-  schedule:
-    - cron: "0 * * * *"
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Fetch, Mask and Encrypt
+      - name: Fetch and Clean for v2rayNG
         run: |
-          # 1. Твой источник
           SOURCE_URL="https://sub.cdnjst.org/sub/d90b4d13-1f4c-443e-9b84-02b6c95b74c1"
           
-          # 2. Качаем ключи (с маскировкой под приложение)
-          curl -L -s -A "v2rayNG/1.8.5" "$SOURCE_URL" -o raw_source.txt
+          # 1. Качаем и расшифровываем исходник
+          curl -L -s -A "v2rayNG/1.8.5" "$SOURCE_URL" -o encrypted.txt
+          sed -i 's/[[:space:]]//g' encrypted.txt
+          base64 -d encrypted.txt > raw_keys.txt 2>/dev/null || cp encrypted.txt raw_keys.txt
+
+          # 2. Создаем файл ТОЛЬКО с ключами (без лишнего текста)
+          # v2rayNG лучше всего работает, когда видит чистый список ссылок
+          > list.txt
           
-          # Декодируем входящий поток, если он зашифрован
-          sed -i 's/[[:space:]]//g' raw_source.txt
-          base64 -d raw_source.txt > decoded.txt 2>/dev/null || cp raw_source.txt decoded.txt
-
-          # 3. Создаем структуру подписки (текстовый вариант)
-          echo "#profile-title: base64:QURBTSBWUE4g8J+agA==" > list.txt
-          echo "#announce: base64:8J+RowCheckIDog0JXRgdC70Lgg0L3QtSBy0LDQsdC+0YLQsNC10YIg4oCUINC+0LHQvdC+0LLQuNGC0LUg0L_QvtC00L_QuNGB0LrRgyE=" >> list.txt
-          echo "#support-url: https://t.me/ElbrusWayBot" >> list.txt
-          echo "#profile-update-interval: 1" >> list.txt
-          echo "" >> list.txt
-
-          # 4. Добавляем ключи с твоими названиями
           COUNT=1
           while IFS= read -r line; do
             line=$(echo "$line" | tr -d '\r' | xargs)
             if [[ $line =~ ^(vless|vmess|trojan|ss):// ]]; then
+              # Вырезаем старое название и ставим свое
               CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
-              # Формат: Ключ#Название
-              echo "${CLEAN_URL}#ADAM VPN 🚀 Server $COUNT" >> list.txt
+              
+              # Получаем название страны из оригинала, если оно там есть
+              NAME=$(echo "$line" | cut -d'#' -f2)
+              
+              # Если в оригинале нет имени, пишем свое
+              if [ -z "$NAME" ]; then NAME="Server $COUNT"; fi
+              
+              echo "${CLEAN_URL}#ADAM VPN | $NAME" >> list.txt
               COUNT=$((COUNT + 1))
             fi
-          done < decoded.txt
+          done < raw_keys.txt
 
-          # 5. ГЛАВНЫЙ ШАГ: Шифруем весь файл README.md в Base64
-          base64 -w 0 list.txt > README.md
-
-      - name: Commit and Push
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "Github Action"
-          git add README.md
-          git commit -m "Update: Encrypted ADAM VPN subscription" || exit 0
-          git push origin main --force
+          # 3. Кодируем в Base64 без переносов строк (важно для v2rayNG)
+          cat list.txt | base64 -w 0 > README.md
           
