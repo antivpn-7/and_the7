@@ -12,44 +12,49 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fetch, Check and Style Keys
+      - name: Fetch and Decode Massive Source
         run: |
-          # 1. Твой источник
           SOURCE_URL="https://vpn.tgflovv.ru:8443/free-speed/3e6ec68a-567b-47cf-95e9-d0e925a935b5"
           FLAGS=("🇸🇴" "🇸🇴" "🇸🇴" "🇺🇸" "🇩🇪" "🇫🇮" "🇵🇱" "🇳🇱" "🇬🇧" "🇫🇷" "🇰🇿" "🇹🇷" "🇸🇪" "🇦🇹" "🇨🇿")
 
           touch README.md
-          # Сохраняем личные ключи
+          # 1. Сохраняем твои личные ключи
           grep "://" README.md | grep -v "Обход Блокировок" > my_own_keys.txt || touch my_own_keys.txt
           cut -d'#' -f1 my_own_keys.txt > existing_urls.txt || touch existing_urls.txt
 
-          # Качаем источник с игнором ошибок SSL (-k)
+          # 2. Качаем ту самую "кашу" со скрина
           curl -L -s -k "$SOURCE_URL" -o raw_source.txt
           
+          # 3. Декодируем (пробуем несколько раз, так как там может быть двойной Base64 или мусор)
           if ! grep -q "://" raw_source.txt; then
-            base64 -d raw_source.txt > decoded_keys.txt 2>/dev/null || cp raw_source.txt decoded_keys.txt
+            # Убираем пробелы и переносы, если они есть в базе, и декодируем
+            cat raw_source.txt | tr -d '\n' | tr -d '\r' | base64 -d > decoded_keys.txt 2>/dev/null || cp raw_source.txt decoded_keys.txt
           else
             cp raw_source.txt decoded_keys.txt
           fi
 
+          # 4. Собираем только живые ссылки
           > alive_keys.txt
           COUNT=1
+          # Читаем построчно то, что декодировали
           while IFS= read -r line; do
-            line=$(echo "$line" | tr -d '\r' | xargs)
-            if [[ $line =~ ^(vless|vmess|trojan|ss):// ]]; then
-              CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
+            # Чистим строку
+            CLEAN_LINE=$(echo "$line" | tr -d '\r' | xargs)
+            
+            if [[ $CLEAN_LINE =~ ^(vless|vmess|trojan|ss):// ]]; then
+              CLEAN_URL=$(echo "$CLEAN_LINE" | cut -d'#' -f1)
+              
+              # Если такого ключа еще нет в твоих личных
               if ! grep -Fxq "$CLEAN_URL" existing_urls.txt; then
-                  RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
-                  echo "${CLEAN_URL}#${RANDOM_FLAG} Обход Блокировок 🔗 $COUNT" >> alive_keys.txt
-                  COUNT=$((COUNT + 1))
+                RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
+                echo "${CLEAN_URL}#${RANDOM_FLAG} Обход Блокировок 🔗 $COUNT" >> alive_keys.txt
+                COUNT=$((COUNT + 1))
               fi
             fi
           done < decoded_keys.txt
 
-          # Сборка
+          # 5. Финальная сборка файла
           TRAFFIC_LINE=$(grep "#subscription-userinfo" README.md || echo "#subscription-userinfo: upload=0; download=0; total=1125899906842624; expire=3803572800")
           
           echo "$TRAFFIC_LINE" > new_readme.md
@@ -63,17 +68,15 @@ jobs:
           cat alive_keys.txt >> new_readme.md
           mv new_readme.md README.md
 
-      - name: Force Commit and Push
+      - name: Commit and Push
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "action@github.com"
+          git config --local user.name "Github Action"
           git add README.md
-          # Проверяем изменения
           if git diff --staged --quiet; then
-            echo "No changes to commit"
+            echo "Никаких изменений нет"
           else
-            git commit -m "Update: Обход Блокировок $(date +'%Y-%m-%d %H:%M')"
-            # Пушим в ту ветку, которая сейчас активна
+            git commit -m "Update from massive source $(date)"
             git push origin HEAD --force
           fi
           
