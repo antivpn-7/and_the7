@@ -15,16 +15,16 @@ jobs:
         run: |
           # 1. Твой НОВЫЙ источник
           SOURCE_URL="https://vpn.tgflovv.ru:8443/free-speed/3e6ec68a-567b-47cf-95e9-d0e925a935b5"
-
-          # Список флагов (🇸🇴 в приоритете)
           FLAGS=("🇸🇴" "🇸🇴" "🇸🇴" "🇺🇸" "🇩🇪" "🇫🇮" "🇵🇱" "🇳🇱" "🇬🇧" "🇫🇷" "🇰🇿" "🇹🇷" "🇸🇪" "🇦🇹" "🇨🇿")
 
-          # 2. Сохраняем ТОЛЬКО личные ключи
+          # Создаем пустой README если его нет
           touch README.md
-          grep "://" README.md | grep -v "🔗" | grep -v "Обход Блокировок" > my_own_keys.txt || touch my_own_keys.txt
-          cut -d'#' -f1 my_own_keys.txt > existing_urls.txt
 
-          # 3. Качаем и декодируем источник
+          # 2. Сохраняем ТОЛЬКО личные ключи (исправлено)
+          grep "://" README.md | grep -v "🔗" | grep -v "Обход Блокировок" > my_own_keys.txt || touch my_own_keys.txt
+          cut -d'#' -f1 my_own_keys.txt > existing_urls.txt || touch existing_urls.txt
+
+          # 3. Качаем источник
           curl -L -s "$SOURCE_URL" -o raw_source.txt
           if ! grep -q "://" raw_source.txt; then
             base64 -d raw_source.txt > decoded_keys.txt 2>/dev/null || cp raw_source.txt decoded_keys.txt
@@ -32,36 +32,25 @@ jobs:
             cp raw_source.txt decoded_keys.txt
           fi
 
-          # 4. Проверка и форматирование названий ключей
+          # 4. Проверка ключей
           > alive_keys.txt
           COUNT=1
-          
           while IFS= read -r line; do
             line=$(echo "$line" | tr -d '\r' | xargs)
             if [[ $line =~ ^(vless|vmess|trojan|ss):// ]]; then
               CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
-              HOST=$(echo "$CLEAN_URL" | sed -e 's/.*@//' -e 's/:.*//' -e 's/\/.*//')
-              PORT=$(echo "$CLEAN_URL" | sed -e 's/.*://' -e 's/[?#\/].*//')
-              
-              if [[ "$CLEAN_URL" == vmess://* ]]; then SKIP_PING=true; else SKIP_PING=false; fi
-
-              if ! grep -q "$CLEAN_URL" existing_urls.txt; then
-                if [ "$SKIP_PING" = true ] || timeout 1s bash -c "true &>/dev/null > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
+              if ! grep -Fxq "$CLEAN_URL" existing_urls.txt; then
                   RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
-                  # Название ключей: Обход Блокировок 🔗
                   echo "${CLEAN_URL}#${RANDOM_FLAG} Обход Блокировок 🔗 $COUNT" >> alive_keys.txt
-                  echo "$CLEAN_URL" >> existing_urls.txt
                   COUNT=$((COUNT + 1))
-                fi
               fi
             fi
           done < decoded_keys.txt
 
-          # 5. Сборка итогового файла
+          # 5. Сборка (Sulim vpn 🚀)
           TRAFFIC_LINE=$(grep "#subscription-userinfo" README.md || echo "#subscription-userinfo: upload=0; download=0; total=1125899906842624; expire=3803572800")
           
           echo "$TRAFFIC_LINE" > new_readme.md
-          # Твое новое название профиля:
           echo "#profile-title: Sulim vpn 🚀" >> new_readme.md
           echo "#profile-update-interval: 1" >> new_readme.md
           echo "#announce:Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!" >> new_readme.md
@@ -70,7 +59,6 @@ jobs:
           
           cat my_own_keys.txt >> new_readme.md
           cat alive_keys.txt >> new_readme.md
-          
           mv new_readme.md README.md
 
       - name: Commit and Push
@@ -78,6 +66,6 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add README.md
-          git commit -m "Update: Profile title Sulim vpn 🚀 and hourly sync" || exit 0
+          git commit -m "Update: Sulim vpn 🚀 $(date)" || exit 0
           git push origin main --force
           
