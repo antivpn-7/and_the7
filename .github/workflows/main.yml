@@ -1,34 +1,83 @@
-      - name: Fetch and Clean for v2rayNG
-        run: |
-          SOURCE_URL="https://sub.cdnjst.org/sub/d90b4d13-1f4c-443e-9b84-02b6c95b74c1"
-          
-          # 1. Качаем и расшифровываем исходник
-          curl -L -s -A "v2rayNG/1.8.5" "$SOURCE_URL" -o encrypted.txt
-          sed -i 's/[[:space:]]//g' encrypted.txt
-          base64 -d encrypted.txt > raw_keys.txt 2>/dev/null || cp encrypted.txt raw_keys.txt
+Name: Sync 1 Source with Random Flags & Numbering
 
-          # 2. Создаем файл ТОЛЬКО с ключами (без лишнего текста)
-          # v2rayNG лучше всего работает, когда видит чистый список ссылок
-          > list.txt
-          
+on:
+  schedule:
+    - cron: "0 * * * *" 
+  workflow_dispatch:
+
+jobs:
+  check-and-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Fetch, Check and Style Keys
+        run: |
+          # 1. Твой НОВЫЙ источник
+          SOURCE_URL="https://vpn.tgflovv.ru:8443/free-speed/3e6ec68a-567b-47cf-95e9-d0e925a935b5"
+
+          # Список флагов (🇸🇴 в приоритете)
+          FLAGS=("🇸🇴" "🇸🇴" "🇸🇴" "🇺🇸" "🇩🇪" "🇫🇮" "🇵🇱" "🇳🇱" "🇬🇧" "🇫🇷" "🇰🇿" "🇹🇷" "🇸🇪" "🇦🇹" "🇨🇿")
+
+          # 2. Сохраняем ТОЛЬКО личные ключи
+          touch README.md
+          grep "://" README.md | grep -v "🔗" | grep -v "Обход Блокировок" > my_own_keys.txt || touch my_own_keys.txt
+          cut -d'#' -f1 my_own_keys.txt > existing_urls.txt
+
+          # 3. Качаем и декодируем источник
+          curl -L -s "$SOURCE_URL" -o raw_source.txt
+          if ! grep -q "://" raw_source.txt; then
+            base64 -d raw_source.txt > decoded_keys.txt 2>/dev/null || cp raw_source.txt decoded_keys.txt
+          else
+            cp raw_source.txt decoded_keys.txt
+          fi
+
+          # 4. Проверка и форматирование названий ключей
+          > alive_keys.txt
           COUNT=1
+          
           while IFS= read -r line; do
             line=$(echo "$line" | tr -d '\r' | xargs)
             if [[ $line =~ ^(vless|vmess|trojan|ss):// ]]; then
-              # Вырезаем старое название и ставим свое
               CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
+              HOST=$(echo "$CLEAN_URL" | sed -e 's/.*@//' -e 's/:.*//' -e 's/\/.*//')
+              PORT=$(echo "$CLEAN_URL" | sed -e 's/.*://' -e 's/[?#\/].*//')
               
-              # Получаем название страны из оригинала, если оно там есть
-              NAME=$(echo "$line" | cut -d'#' -f2)
-              
-              # Если в оригинале нет имени, пишем свое
-              if [ -z "$NAME" ]; then NAME="Server $COUNT"; fi
-              
-              echo "${CLEAN_URL}#ADAM VPN | $NAME" >> list.txt
-              COUNT=$((COUNT + 1))
-            fi
-          done < raw_keys.txt
+              if [[ "$CLEAN_URL" == vmess://* ]]; then SKIP_PING=true; else SKIP_PING=false; fi
 
-          # 3. Кодируем в Base64 без переносов строк (важно для v2rayNG)
-          cat list.txt | base64 -w 0 > README.md
+              if ! grep -q "$CLEAN_URL" existing_urls.txt; then
+                if [ "$SKIP_PING" = true ] || timeout 1s bash -c "true &>/dev/null > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
+                  RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
+                  # Название ключей: Обход Блокировок 🔗
+                  echo "${CLEAN_URL}#${RANDOM_FLAG} Обход Блокировок 🔗 $COUNT" >> alive_keys.txt
+                  echo "$CLEAN_URL" >> existing_urls.txt
+                  COUNT=$((COUNT + 1))
+                fi
+              fi
+            fi
+          done < decoded_keys.txt
+
+          # 5. Сборка итогового файла
+          TRAFFIC_LINE=$(grep "#subscription-userinfo" README.md || echo "#subscription-userinfo: upload=0; download=0; total=1125899906842624; expire=3803572800")
+          
+          echo "$TRAFFIC_LINE" > new_readme.md
+          # Твое новое название профиля:
+          echo "#profile-title: Sulim vpn 🚀" >> new_readme.md
+          echo "#profile-update-interval: 1" >> new_readme.md
+          echo "#announce:Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!" >> new_readme.md
+          echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> new_readme.md
+          echo "" >> new_readme.md
+          
+          cat my_own_keys.txt >> new_readme.md
+          cat alive_keys.txt >> new_readme.md
+          
+          mv new_readme.md README.md
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Github Action"
+          git add README.md
+          git commit -m "Update: Profile title Sulim vpn 🚀 and hourly sync" || exit 0
+          git push origin main --force
           
