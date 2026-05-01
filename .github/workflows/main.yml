@@ -1,98 +1,55 @@
-name: Sync 1 Source with Random Flags & Numbering
+name: ADAM VPN Encrypt Sync
 
 on:
   schedule:
-    - cron: "0 */1 * * *" 
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 jobs:
-  check-and-sync:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Fetch, Check and Style Keys
+      - name: Fetch, Mask and Encrypt
         run: |
-          # 1. Твой новый источник
-          SOURCE_URL="https://vpn.tgflovv.ru:8443/free-speed/46c6baae-ed09-4000-bb69-f63f1c100fbf"
-
-          # Список флагов для разнообразия
-          FLAGS=("🇺🇸" "🇩🇪" "🇫🇮" "🇵🇱" "🇳🇱" "🇬🇧" "🇫🇷" "🇰🇿" "🇹🇷" "🇸🇪" "🇦🇹" "🇨🇿")
-
-          # 2. Сохраняем личные ключи (без ракеты 🚀)
-          touch README.md
-          grep "://" README.md | grep -v "🚀" > my_own_keys.txt || touch my_own_keys.txt
+          # 1. Твой источник
+          SOURCE_URL="https://sub.cdnjst.org/sub/d90b4d13-1f4c-443e-9b84-02b6c95b74c1"
           
-          # Собираем существующие URL для проверки на дубли
-          cut -d'#' -f1 my_own_keys.txt > existing_urls.txt
-
-          # 3. Качаем и декодируем источник
-          curl -L -s "$SOURCE_URL" -o raw_source.txt
+          # 2. Качаем ключи (с маскировкой под приложение)
+          curl -L -s -A "v2rayNG/1.8.5" "$SOURCE_URL" -o raw_source.txt
           
-          # Проверяем, является ли файл Base64, и декодируем если нужно
-          if ! grep -q "://" raw_source.txt; then
-            base64 -d raw_source.txt > decoded_keys.txt 2>/dev/null || cp raw_source.txt decoded_keys.txt
-          else
-            cp raw_source.txt decoded_keys.txt
-          fi
+          # Декодируем входящий поток, если он зашифрован
+          sed -i 's/[[:space:]]//g' raw_source.txt
+          base64 -d raw_source.txt > decoded.txt 2>/dev/null || cp raw_source.txt decoded.txt
 
-          # 4. Проверка ключей на доступность
-          > alive_keys.txt
+          # 3. Создаем структуру подписки (текстовый вариант)
+          echo "#profile-title: base64:QURBTSBWUE4g8J+agA==" > list.txt
+          echo "#announce: base64:8J+RowCheckIDog0JXRgdC70Lgg0L3QtSBy0LDQsdC+0YLQsNC10YIg4oCUINC+0LHQvdC+0LLQuNGC0LUg0L_QvtC00L_QuNGB0LrRgyE=" >> list.txt
+          echo "#support-url: https://t.me/ElbrusWayBot" >> list.txt
+          echo "#profile-update-interval: 1" >> list.txt
+          echo "" >> list.txt
+
+          # 4. Добавляем ключи с твоими названиями
           COUNT=1
-          
           while IFS= read -r line; do
-            # Убираем лишние пробелы/символы возврата каретки
             line=$(echo "$line" | tr -d '\r' | xargs)
-            
             if [[ $line =~ ^(vless|vmess|trojan|ss):// ]]; then
               CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
-              
-              # Парсим хост и порт для проверки (TCP Ping)
-              # Для vmess парсинг сложнее, но для vless/ss/trojan работает:
-              HOST=$(echo "$CLEAN_URL" | sed -e 's/.*@//' -e 's/:.*//' -e 's/\/.*//')
-              PORT=$(echo "$CLEAN_URL" | sed -e 's/.*://' -e 's/[?#\/].*//')
-              
-              # Если это vmess в base64 внутри ссылки, пробуем вытащить адрес иначе
-              if [[ "$CLEAN_URL" == vmess://* ]]; then
-                 # Упрощенная логика для vmess: если не парсится хост, пропускаем проверку и считаем живым (или добавьте jq)
-                 SKIP_PING=true
-              else
-                 SKIP_PING=false
-              fi
-
-              if ! grep -q "$CLEAN_URL" existing_urls.txt; then
-                # Проверка порта (timeout 1 сек)
-                if [ "$SKIP_PING" = true ] || timeout 1s bash -c "true &>/dev/null > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
-                  RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
-                  echo "${CLEAN_URL}#${RANDOM_FLAG} Antizaglushka 🚀 №$COUNT" >> alive_keys.txt
-                  echo "$CLEAN_URL" >> existing_urls.txt
-                  COUNT=$((COUNT + 1))
-                fi
-              fi
+              # Формат: Ключ#Название
+              echo "${CLEAN_URL}#ADAM VPN 🚀 Server $COUNT" >> list.txt
+              COUNT=$((COUNT + 1))
             fi
-          done < decoded_keys.txt
+          done < decoded.txt
 
-          # 5. Сборка итогового файла
-          TRAFFIC_LINE=$(grep "#subscription-userinfo" README.md || echo "#subscription-userinfo: upload=0; download=0; total=1125899906842624; expire=3803572800")
-          
-          echo "$TRAFFIC_LINE" > new_readme.md
-          echo "#profile-title: the energy vpn" >> new_readme.md
-          echo "#announce:Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!" >> new_readme.md
-          echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> new_readme.md
-          echo "" >> new_readme.md
-          
-          # Сначала личные сервера
-          cat my_own_keys.txt >> new_readme.md
-          # Затем новые найденные
-          cat alive_keys.txt >> new_readme.md
-          
-          mv new_readme.md README.md
+          # 5. ГЛАВНЫЙ ШАГ: Шифруем весь файл README.md в Base64
+          base64 -w 0 list.txt > README.md
 
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add README.md
-          git commit -m "Update: single source speed from tgflovv" || exit 0
+          git commit -m "Update: Encrypted ADAM VPN subscription" || exit 0
           git push origin main --force
           
