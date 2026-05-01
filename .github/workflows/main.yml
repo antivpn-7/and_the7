@@ -13,53 +13,66 @@ jobs:
 
       - name: Fetch, Check and Style Keys
         run: |
-          # 1. Твои источники
-          SOURCES=(
-            "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/Vless-Reality-White-Lists-Rus-Mobile.txt"
-            "https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/Vless-Reality-White-Lists-Rus-Mobile-2.txt"
-          )
+          # 1. Твой новый источник
+          SOURCE_URL="https://vpn.tgflovv.ru:8443/free-speed/46c6baae-ed09-4000-bb69-f63f1c100fbf"
 
-          # Список флага для разнообразия
+          # Список флагов для разнообразия
           FLAGS=("🇺🇸" "🇩🇪" "🇫🇮" "🇵🇱" "🇳🇱" "🇬🇧" "🇫🇷" "🇰🇿" "🇹🇷" "🇸🇪" "🇦🇹" "🇨🇿")
 
-          # 2. Сохраняем твои личные ключи (те, где нет ракеты 🚀)
+          # 2. Сохраняем личные ключи (без ракеты 🚀)
           touch README.md
           grep "://" README.md | grep -v "🚀" > my_own_keys.txt || touch my_own_keys.txt
           
           # Собираем существующие URL для проверки на дубли
           cut -d'#' -f1 my_own_keys.txt > existing_urls.txt
 
-          # 3. Качаем и проверяем новые ключи
+          # 3. Качаем и декодируем источник
+          curl -L -s "$SOURCE_URL" -o raw_source.txt
+          
+          # Проверяем, является ли файл Base64, и декодируем если нужно
+          if ! grep -q "://" raw_source.txt; then
+            base64 -d raw_source.txt > decoded_keys.txt 2>/dev/null || cp raw_source.txt decoded_keys.txt
+          else
+            cp raw_source.txt decoded_keys.txt
+          fi
+
+          # 4. Проверка ключей на доступность
           > alive_keys.txt
           COUNT=1
           
-          for url in "${SOURCES[@]}"; do
-            curl -L -s "$url" -o temp.txt
-            if ! grep -q "://" temp.txt; then
-              base64 -d temp.txt > raw_temp.txt 2>/dev/null || cp temp.txt raw_temp.txt
-            else
-              cp temp.txt raw_temp.txt
-            fi
+          while IFS= read -r line; do
+            # Убираем лишние пробелы/символы возврата каретки
+            line=$(echo "$line" | tr -d '\r' | xargs)
+            
+            if [[ $line =~ ^(vless|vmess|trojan|ss):// ]]; then
+              CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
+              
+              # Парсим хост и порт для проверки (TCP Ping)
+              # Для vmess парсинг сложнее, но для vless/ss/trojan работает:
+              HOST=$(echo "$CLEAN_URL" | sed -e 's/.*@//' -e 's/:.*//' -e 's/\/.*//')
+              PORT=$(echo "$CLEAN_URL" | sed -e 's/.*://' -e 's/[?#\/].*//')
+              
+              # Если это vmess в base64 внутри ссылки, пробуем вытащить адрес иначе
+              if [[ "$CLEAN_URL" == vmess://* ]]; then
+                 # Упрощенная логика для vmess: если не парсится хост, пропускаем проверку и считаем живым (или добавьте jq)
+                 SKIP_PING=true
+              else
+                 SKIP_PING=false
+              fi
 
-            while IFS= read -r line; do
-              if [[ $line =~ ^(vless|vmess|trojan|ss):// ]]; then
-                CLEAN_URL=$(echo "$line" | cut -d'#' -f1)
-                HOST=$(echo "$CLEAN_URL" | sed -e 's/.*@//' -e 's/:.*//' -e 's/\/.*//')
-                PORT=$(echo "$CLEAN_URL" | sed -e 's/.*://' -e 's/[?#\/].*//')
-                
-                if ! grep -q "$CLEAN_URL" existing_urls.txt; then
-                  if timeout 1s bash -c "true &>/dev/null > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
-                    RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
-                    echo "${CLEAN_URL}#${RANDOM_FLAG} Antizaglushka 🚀 №$COUNT" >> alive_keys.txt
-                    echo "$CLEAN_URL" >> existing_urls.txt
-                    COUNT=$((COUNT + 1))
-                  fi
+              if ! grep -q "$CLEAN_URL" existing_urls.txt; then
+                # Проверка порта (timeout 1 сек)
+                if [ "$SKIP_PING" = true ] || timeout 1s bash -c "true &>/dev/null > /dev/tcp/$HOST/$PORT" 2>/dev/null; then
+                  RANDOM_FLAG=${FLAGS[$RANDOM % ${#FLAGS[@]}]}
+                  echo "${CLEAN_URL}#${RANDOM_FLAG} Antizaglushka 🚀 №$COUNT" >> alive_keys.txt
+                  echo "$CLEAN_URL" >> existing_urls.txt
+                  COUNT=$((COUNT + 1))
                 fi
               fi
-            done < raw_temp.txt
-          done
+            fi
+          done < decoded_keys.txt
 
-          # 4. Сборка итогового файла
+          # 5. Сборка итогового файла
           TRAFFIC_LINE=$(grep "#subscription-userinfo" README.md || echo "#subscription-userinfo: upload=0; download=0; total=1125899906842624; expire=3803572800")
           
           echo "$TRAFFIC_LINE" > new_readme.md
@@ -68,10 +81,9 @@ jobs:
           echo "happ://routing/bypass-lan-and-cn?name=Bypass+LAN+and+CN" >> new_readme.md
           echo "" >> new_readme.md
           
-          # Твои личные сервера (Основной и т.д.) стоят первыми
+          # Сначала личные сервера
           cat my_own_keys.txt >> new_readme.md
-          
-          # Новые сервера
+          # Затем новые найденные
           cat alive_keys.txt >> new_readme.md
           
           mv new_readme.md README.md
@@ -81,6 +93,6 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "Github Action"
           git add README.md
-          git commit -m "Update: single source speed, random flags and numbering" || exit 0
+          git commit -m "Update: single source speed from tgflovv" || exit 0
           git push origin main --force
           
