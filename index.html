@@ -8,23 +8,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-            
-            /* НОВЫЙ КРАСНЫЙ ФОН (градиент от темно-красного к черному) */
             background: radial-gradient(circle at 10% 20%, #300000, #000000);
-            
             min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
             color: white; padding: 24px;
         }
         .glass-card {
-            background: rgba(15, 0, 0, 0.7); /* Тёмная карточка с красным оттенком */
+            background: rgba(15, 0, 0, 0.7);
             backdrop-filter: blur(20px);
             border-radius: 40px;
             padding: 40px 24px;
-            
-            /* Красная тень вокруг карточки */
             box-shadow: 0 25px 50px -12px rgba(255, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-            
             width: 100%; max-width: 380px; text-align: center;
         }
         .logo {
@@ -32,8 +26,6 @@
             border-radius: 30px;
             margin: 0 auto 24px;
             overflow: hidden;
-            
-            /* Красное свечение вокруг логотипа */
             box-shadow: 0 0 35px rgba(255, 0, 0, 0.5);
             border: 2px solid rgba(255, 0, 0, 0.3);
         }
@@ -44,7 +36,6 @@
         h1 { 
             font-size: 26px; font-weight: 900; margin-bottom: 8px; 
             letter-spacing: -1px; text-transform: uppercase;
-            /* Легкое красное свечение текста */
             text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
         .subhead { color: #8e9cae; font-size: 14px; margin-bottom: 32px; }
@@ -53,13 +44,11 @@
             border-radius: 30px;
             padding: 24px;
             margin-bottom: 24px;
-            /* Красная рамка панели статуса */
             border: 1px solid rgba(255, 0, 0, 0.2);
         }
         .loader {
             width: 35px; height: 35px;
             border: 3px solid rgba(255, 0, 0, 0.1);
-            /* Красный спиннер */
             border-top: 3px solid #ff0000;
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -69,8 +58,6 @@
         .step-primary { font-size: 16px; font-weight: 600; }
         .step-secondary { font-size: 12px; color: #64748b; margin-top: 4px; }
         .hidden { display: none; }
-        
-        /* ЗЕЛЕНАЯ КНОПКА WHATSAPP (без изменений) */
         .btn-wa {
             display: flex; align-items: center; justify-content: center;
             background: #25D366; 
@@ -96,26 +83,26 @@
         <img src="IMG_20260504_091829.jpg" alt="Logo">
     </div>
     <h1>АНТИЗАГЛУШКА</h1>
-    <div class="subhead">Защита связи без границ</div>
+    <div class="subhead">Обход Блокировок</div>
 
     <div class="status-panel">
         <div id="step1">
             <div class="loader"></div>
-            <div class="step-primary">Шифрование канала</div>
-            <div class="step-secondary">Проверка безопасности...</div>
+            <div class="step-primary">Подготовка ключей</div>
+            <div class="step-secondary">Генерация сессии...</div>
         </div>
         <div id="step2" class="hidden">
             <div class="loader"></div>
-            <div class="step-primary">Запуск Hiddify</div>
+            <div class="step-primary">Запуск Happ</div>
             <div class="step-secondary">Передаем настройки...</div>
         </div>
         <div id="step3" class="hidden">
             <div class="step-primary" style="color: #4ade80;">Готово!</div>
-            <div class="step-secondary">Наслаждайтесь интернетом</div>
+            <div class="step-secondary">Нажмите Открыть</div>
         </div>
     </div>
 
-    <a href="https://wa.me/79659571323" class="btn-wa" target="_blank">Написать мастеру</a>
+    <a href="https://wa.me/79659571323" class="btn-wa" target="_blank">Техподдержка 24/7</a>
 </div>
 
 <script>
@@ -136,5 +123,3 @@
 </script>
 </body>
 </html>
-
-
