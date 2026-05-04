@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>АНТИЗАГЛУШКА VPN</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+            background: radial-gradient(circle at 10% 20%, #050a14, #02040a);
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            color: white; padding: 24px;
+        }
+        .glass-card {
+            background: rgba(10, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 40px 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            width: 100%; max-width: 380px; text-align: center;
+        }
+        .logo {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border-radius: 22px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+        .logo span { font-size: 32px; font-weight: 800; letter-spacing: 1px; }
+        h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; text-transform: uppercase; }
+        .subhead { color: #64748b; font-size: 14px; margin-bottom: 32px; }
+        .status-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        .loader {
+            width: 40px; height: 40px;
+            border: 3px solid rgba(59, 130, 246, 0.1);
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .step-primary { font-size: 16px; font-weight: 600; }
+        .step-secondary { font-size: 12px; color: #475569; margin-top: 4px; }
+        .hidden { display: none; }
+        .btn {
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 14px;
+            text-decoration: none; color: #94a3b8;
+            font-size: 14px; font-weight: 500;
+            transition: 0.3s; margin-top: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .btn:hover { background: rgba(59, 130, 246, 0.1); color: white; border-color: #3b82f6; }
+    </style>
+</head>
+<body>
+<div class="glass-card">
+    <div class="logo"><span>AZ</span></div>
+    <h1>АНТИЗАГЛУШКА</h1>
+    <div class="subhead">Защита связи без границ</div>
+
+    <div class="status-panel">
+        <div id="step1">
+            <div class="loader"></div>
+            <div class="step-primary">Шифрование канала</div>
+            <div class="step-secondary">Подготовка уникального ключа...</div>
+        </div>
+        <div id="step2" class="hidden">
+            <div class="loader"></div>
+            <div class="step-primary">Запуск Hiddify</div>
+            <div class="step-secondary">Применяем настройки подписки</div>
+        </div>
+        <div id="step3" class="hidden">
+            <div class="step-primary" style="color: #4ade80;">Готово!</div>
+            <div class="step-secondary">Сервера успешно добавлены</div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/79280210040" class="btn" target="_blank">Написать в WhatsApp</a>
+</div>
+
+<script>
+    // Твой очищенный ключ
+    const MY_CONFIG = "Happ://crypt5/iaii2xDg0LQ5O8ND2w15fQ6Y+0+9gCN94nN9v/jVguXDVHUfS54UrIw3BkfEywVoqKW8+9ebGKeFYygyK+JNVaHxmJ8BQ2kt1AFl1PONJTLYLMDLrQl00Z031tAHZjx7C8SZdw48qTC57JnzVLPt4X7QzuZ4ARLXJg/aiz4b==IwojCNozSj4cPl5pucZb8WG2bkovIEMzkgxlpcluBCqnpKRypU5poshAfgh2n8z3k/mNj4SWtKOFk5yBH3894uBVzBDC2FFiQQVWXpFGMC3sxTLHssvwLBov/Le6JFcjGxyeOVOuJNd1q9xr59xJ3UegqMrnmW5qBqYbQ2VRFin2mK79x1xRoK6lFFaOY8vhh4YGjC6Lz8Mn2rd49DrDQ7Dn8PMbcav1A6g2+1K0OQAOoZQGXBfo4NM31VwhuYTg2bQDnECrYtMlBEeA4tWu6058HWvLT4sNB2kqIBZt5E6wr9cQQluRU0e+35Lsy1TPtQ/TFOOAF/Ot1CkIDKH48FKAmBYV6qIN0HPD5n8YiZCezRaIgVghLPAB9E051khS8K2UlUOXcTykd5m/I6cg5YiXyCsXNDN3Ap4TKBfbWpGr74NLpNPcoQUV6vvkT4WBQ8WDoPRIVU6fOicUvEf4p26KHO70p+lxehURUZ/fJ7hEV2TsAY0rNg39HxNDVcYe2FRGmobQIsiLo33uC3ri4FVkr2kxt0yaUIiFVRBEiQG5fNyrcs0Zk0mE1+/u0F/uvZxMCu0AM5+6P6DV+jkxqcBXSiW7IOossfxcZG60T5dOsCGWu3bPRWTY4SELpMBKhgeffy8/u//pS6cCPqbsd/UcgomjbP8G2yhKe4gegnY=";
+    
+    setTimeout(() => {
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.remove('hidden');
+        
+        setTimeout(() => {
+            window.location.href = MY_CONFIG;
+            
+            setTimeout(() => {
+                document.getElementById('step2').classList.add('hidden');
+                document.getElementById('step3').classList.remove('hidden');
+            }, 1000);
+        }, 2000);
+    }, 2000);
+</script>
+</body>
+</html>
+
