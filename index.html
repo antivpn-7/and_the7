@@ -8,65 +8,93 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-            background: radial-gradient(circle at 10% 20%, #050a14, #02040a);
+            
+            /* НОВЫЙ КРАСНЫЙ ФОН (градиент от темно-красного к черному) */
+            background: radial-gradient(circle at 10% 20%, #300000, #000000);
+            
             min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
             color: white; padding: 24px;
         }
         .glass-card {
-            background: rgba(10, 20, 35, 0.6);
+            background: rgba(15, 0, 0, 0.7); /* Тёмная карточка с красным оттенком */
             backdrop-filter: blur(20px);
             border-radius: 40px;
             padding: 40px 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            
+            /* Красная тень вокруг карточки */
+            box-shadow: 0 25px 50px -12px rgba(255, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+            
             width: 100%; max-width: 380px; text-align: center;
         }
         .logo {
-            width: 80px; height: 80px;
-            background: linear-gradient(135deg, #1e40af, #3b82f6);
-            border-radius: 22px;
-            display: flex; align-items: center; justify-content: center;
+            width: 110px; height: 110px;
+            border-radius: 30px;
             margin: 0 auto 24px;
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+            overflow: hidden;
+            
+            /* Красное свечение вокруг логотипа */
+            box-shadow: 0 0 35px rgba(255, 0, 0, 0.5);
+            border: 2px solid rgba(255, 0, 0, 0.3);
         }
-        .logo span { font-size: 32px; font-weight: 800; letter-spacing: 1px; }
-        h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; text-transform: uppercase; }
-        .subhead { color: #64748b; font-size: 14px; margin-bottom: 32px; }
+        .logo img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        h1 { 
+            font-size: 26px; font-weight: 900; margin-bottom: 8px; 
+            letter-spacing: -1px; text-transform: uppercase;
+            /* Легкое красное свечение текста */
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        .subhead { color: #8e9cae; font-size: 14px; margin-bottom: 32px; }
         .status-panel {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 30px;
             padding: 24px;
             margin-bottom: 24px;
-            border: 1px solid rgba(59, 130, 246, 0.1);
+            /* Красная рамка панели статуса */
+            border: 1px solid rgba(255, 0, 0, 0.2);
         }
         .loader {
-            width: 40px; height: 40px;
-            border: 3px solid rgba(59, 130, 246, 0.1);
-            border-top: 3px solid #3b82f6;
+            width: 35px; height: 35px;
+            border: 3px solid rgba(255, 0, 0, 0.1);
+            /* Красный спиннер */
+            border-top: 3px solid #ff0000;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 16px;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .step-primary { font-size: 16px; font-weight: 600; }
-        .step-secondary { font-size: 12px; color: #475569; margin-top: 4px; }
+        .step-secondary { font-size: 12px; color: #64748b; margin-top: 4px; }
         .hidden { display: none; }
-        .btn {
+        
+        /* ЗЕЛЕНАЯ КНОПКА WHATSAPP (без изменений) */
+        .btn-wa {
             display: flex; align-items: center; justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
+            background: #25D366; 
             border-radius: 20px;
-            padding: 14px;
-            text-decoration: none; color: #94a3b8;
-            font-size: 14px; font-weight: 500;
+            padding: 16px;
+            text-decoration: none; 
+            color: #ffffff; 
+            font-size: 16px; font-weight: 700;
             transition: 0.3s; margin-top: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: none;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
         }
-        .btn:hover { background: rgba(59, 130, 246, 0.1); color: white; border-color: #3b82f6; }
+        .btn-wa:hover { 
+            background: #128C7E; 
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(37, 211, 102, 0.3);
+        }
     </style>
 </head>
 <body>
 <div class="glass-card">
-    <div class="logo"><span>AZ</span></div>
+    <div class="logo">
+        <img src="IMG_20260504_091829.jpg" alt="Logo">
+    </div>
     <h1>АНТИЗАГЛУШКА</h1>
     <div class="subhead">Защита связи без границ</div>
 
@@ -74,33 +102,31 @@
         <div id="step1">
             <div class="loader"></div>
             <div class="step-primary">Шифрование канала</div>
-            <div class="step-secondary">Подготовка уникального ключа...</div>
+            <div class="step-secondary">Проверка безопасности...</div>
         </div>
         <div id="step2" class="hidden">
             <div class="loader"></div>
             <div class="step-primary">Запуск Hiddify</div>
-            <div class="step-secondary">Применяем настройки подписки</div>
+            <div class="step-secondary">Передаем настройки...</div>
         </div>
         <div id="step3" class="hidden">
             <div class="step-primary" style="color: #4ade80;">Готово!</div>
-            <div class="step-secondary">Сервера успешно добавлены</div>
+            <div class="step-secondary">Наслаждайтесь интернетом</div>
         </div>
     </div>
 
-    <a href="https://wa.me/79280210040" class="btn" target="_blank">Написать в WhatsApp</a>
+    <a href="https://wa.me/79659571323" class="btn-wa" target="_blank">Написать мастеру</a>
 </div>
 
 <script>
-    // Твой очищенный ключ
-    const MY_CONFIG = "happ://crypt5/hfqaj5fgqieoeQqa4k18oCIiJwat4uSe6VsfEADvj0LsSLf95oonXWhulooB+XO7QjPmWrikd9V8QpabvGbhe8QEyvoDEkySIZH3HR517XNKcDu02AmvXYCsLnB5Cr4YNUP2nAUwA6jtkEftZaHE/VopCI+UcSTc93QwBph8crzjJ/1rk6dbkcVNbQ/x4bCWy8Kn4tDq==GgXxBdPnpTKrNnYlwjVaf2MqxQ4iwdfxf1xbzXTpfTYXKnEz3RVLHfyug35a4mEFGJ0g3D7HKz5StLG1qGTcYxr+xNtOturPwNp14YdRjhmqk1g5zPl9z1DQMEahpr7c1S4VgFiUNn3Qbsf5uFyd3idTEjIY0UqgkaXvrS54Cfm5LKMhWqlcqU+fTYdnhWxjV8V/yQuDI/leD+5z3YW3zbmfV5aK5DkLxLVQJNNftD2oVdfewwh1tR5XecQzLyUtNkI6RjBXy3S0KQXT6BfwGA1A/2bi0GiHVeWVp/cLpO8KRzVmhyvsZwIAY24y+NooJR0j1YPMBNcE0r5K+KaDarEB/pcF6IfBF4pIsM7o5CLvx/nO5C2a8KG8R7ayPRA4WftUfEIIkQ8kkwPnAea2xe3zh/3KkJazv9MYA6pwEPLnFaYkzMTcIeYAGJtJWRGJPiBsvFwUs311LsjyL2aMdg8PZQKMjjL8mj4ojCcSgOsbEgwPcycRIdbttmzVg8UXOp2PhYn+0Fd/RV5wA6kZgb4w7wMBtNu81VB9ucXy38UeEneTf7oQxto41L0UUWyjFY4IcwSPk9Uq+aDElDI2Qi1gXcwgPq1s4ZzxvRgqDdrj1RY0Uo1PknUYiYnY3vWlFI0lheyp3y8t8lLjviy3ROLl4Vzk+4c8Nld0FHgBG78=/fxctr"
-        
+    const MY_CONFIG = "happ://crypt5/hfqaj5fgqieoeQqa4k18oCIiJwat4uSe6VsfEADvj0LsSLf95oonXWhulooB+XO7QjPmWrikd9V8QpabvGbhe8QEyvoDEkySIZH3HR517XNKcDu02AmvXYCsLnB5Cr4YNUP2nAUwA6jtkEftZaHE/VopCI+UcSTc93QwBph8crzjJ/1rk6dbkcVNbQ/x4bCWy8Kn4tDq==GgXxBdPnpTKrNnYlwjVaf2MqxQ4iwdfxf1xbzXTpfTYXKnEz3RVLHfyug35a4mEFGJ0g3D7HKz5StLG1qGTcYxr+xNtOturPwNp14YdRjhmqk1g5zPl9z1DQMEahpr7c1S4VgFiUNn3Qbsf5uFyd3idTEjIY0UqgkaXvrS54Cfm5LKMhWqlcqU+fTYdnhWxjV8V/yQuDI/leD+5z3YW3zbmfV5aK5DkLxLVQJNNftD2oVdfewwh1tR5XecQzLyUtNkI6RjBXy3S0KQXT6BfwGA1A/2bi0GiHVeWVp/cLpO8KRzVmhyvsZwIAY24y+NooJR0j1YPMBNcE0r5K+KaDarEB/pcF6IfBF4pIsM7o5CLvx/nO5C2a8KG8R7ayPRA4WftUfEIIkQ8kkwPnAea2xe3zh/3KkJazv9MYA6pwEPLnFaYkzMTcIeYAGJtJWRGJPiBsvFwUs311LsjyL2aMdg8PZQKMjjL8mj4ojCcSgOsbEgwPcycRIdbttmzVg8UXOp2PhYn+0Fd/RV5wA6kZgb4w7wMBtNu81VB9ucXy38UeEneTf7oQxto41L0UUWyjFY4IcwSPk9Uq+aDElDI2Qi1gXcwgPq1s4ZzxvRgqDdrj1RY0Uo1PknUYiYnY3vWlFI0lheyp3y8t8lLjviy3ROLl4Vzk+4c8Nld0FHgBG78=/fxctr";
+    
     setTimeout(() => {
         document.getElementById('step1').classList.add('hidden');
         document.getElementById('step2').classList.remove('hidden');
         
         setTimeout(() => {
             window.location.href = MY_CONFIG;
-            
             setTimeout(() => {
                 document.getElementById('step2').classList.add('hidden');
                 document.getElementById('step3').classList.remove('hidden');
@@ -110,4 +136,5 @@
 </script>
 </body>
 </html>
+
 
