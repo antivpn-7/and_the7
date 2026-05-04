@@ -1,1 +1,8 @@
+#subscription-userinfo: upload=1; download=1; total=1; expire=999999999999999
+#profile-title: adam vpn 
+#profile-update-interval: 1
+#subscription-update-interval: 1
+#announce: Если VPN не работает нажмите 🔄 , после ⏱️ и выберите сервер с наименьшим показателем ms!
+#support-url: https://wa.me/79659571323
+#profile-web-page-url: https://wa.me/79659571323
 happ://crypt5/iaii2xDg0LQ5O8ND2w15fQ6Y+0+9gCN94nN9v/jVguXDVHUfS54UrIw3BkfEywVoqKW8+9ebGKeFYygyK+JNVaHxmJ8BQ2kt1AFl1PONJTLYLMDLrQl00Z031tAHZjx7C8SZdw48qTC57JnzVLPt4X7QzuZ4ARLXJg/aiz4b==IwojCNozSj4cPl5pucZb8WG2bkovIEMzkgxlpcluBCqnpKRypU5poshAfgh2n8z3k/mNj4SWtKOFk5yBH3894uBVzBDC2FFiQQVWXpFGMC3sxTLHssvwLBov/Le6JFcjGxyeOVOuJNd1q9xr59xJ3UegqMrnmW5qBqYbQ2VRFin2mK79x1xRoK6lFFaOY8vhh4YGjC6Lz8Mn2rd49DrDQ7Dn8PMbcav1A6g2+1K0OQAOoZQGXBfo4NM31VwhuYTg2bQDnECrYtMlBEeA4tWu6058HWvLT4sNB2kqIBZt5E6wr9cQQluRU0e+35Lsy1TPtQ/TFOOAF/Ot1CkIDKH48FKAmBYV6qIN0HPD5n8YiZCezRaIgVghLPAB9E051khS8K2UlUOXcTykd5m/I6cg5YiXyCsXNDN3Ap4TKBfbWpGr74NLpNPcoQUV6vvkT4WBQ8WDoPRIVU6fOicUvEf4p26KHO70p+lxehURUZ/fJ7hEV2TsAY0rNg39HxNDVcYe2FRGmobQIsiLo33uC3ri4FVkr2kxt0yaUIiFVRBEiQG5fNyrcs0Zk0mE1+/u0F/uvZxMCu0AM5+6P6DV+jkxqcBXSiW7IOossfxcZG60T5dOsCGWu3bPRWTY4SELpMBKhgeffy8/u//pS6cCPqbsd/UcgomjbP8G2yhKe4gegnY=HVdioa
