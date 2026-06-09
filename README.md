@@ -2,7 +2,7 @@
 #profile-title: adam vpn 
 #profile-update-interval: 1
 #subscription-update-interval: 1
-#announce:base64:8J+QuCDQodCw0LnRgjogTWVyYVZQTi5jYy5jZAoK8J+IryBUZWxlZ3JhbSDQutCw0L3QsNC7OiBATWVyYVZQTgrwn6eqINCS0LDRiNCwINC/0L7QtNC00LXRgNC20LrQsCDigJMg0L/QvtC00L/QuNGB0LrQsCDQvdCwINC90LDRiCDQutCw0L3QsNC7Cgrwn4yzINCf0L7RgdC70LXQtNC90LXQtSDQvtCx0L3QvtCy0LvQtdC90LjQtTogMDE6NDEgKNCc0KHQmikK8J+TlyDQntCx0L3QvtCy0LvQtdC90LjQtSDRgNCw0Lcg0LIgMTUg0LzQuNC90YPRggrwn5CiINCQ0LLRgtC+LdC+0LHQvdC+0LLQu9C10L3QuNC1INGA0LDQtyDQsiDRh9Cw0YE=
+#announce:base64:IyBhbm5vdW5jZTpiYXNlNjQ6Cl8J+QuCDQodCw0LnRgjogTWVyYVZQTi5jYy5jZAoK8J+IryBUZWxlZ3JhbSDQutCw0L3QsNC7OiBATWVyYVZQTgrwn6eqINCS0LDRiNCwINC/0L7QtNC00LXRgN
 #support-url: https://wa.me/79659571323
 #profile-web-page-url: https://wa.me/79659571323
 #ping-result: time
